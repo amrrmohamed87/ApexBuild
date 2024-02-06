@@ -33,9 +33,19 @@ function Navbar() {
           {navLinks.map((item) => (
             <li
               key={item.label}
-              className={`text-white p-8 hover:animate-pulse`}
+              className={`text-white p-8 hover:animate-pulse ${
+                !isScrolled && "font-bold"
+              }`}
             >
-              <NavLink to={item.to}>{item.label}</NavLink>
+              <NavLink
+                to={item.to}
+                className={({ isActive }) =>
+                  isActive ? "font-extrabold" : "font-normal"
+                }
+                end
+              >
+                {item.label}
+              </NavLink>
             </li>
           ))}
         </ul>
@@ -49,7 +59,7 @@ function Navbar() {
         <ul
           className={
             isSidebar
-              ? "fixed md:hidden right-0 top-0 w-1/2 h-full bg-[#2a2a2c] ease-in-out duration-500"
+              ? "fixed md:hidden right-0 top-0 w-1/2 h-full bg-[#2a2a2c] bg-opacity-80 ease-in-out duration-500"
               : "fixed top-0 bottom-0 right-[-100%] ease-in-out w-[60%] duration-500"
           }
         >
@@ -61,9 +71,17 @@ function Navbar() {
           {navLinks.map((item) => (
             <li
               key={item.label}
-              className="text-white m-2 mb-6 hover:animate-pulse"
+              className="text-white m-2 pt-2 mb-6 hover:animate-pulse"
             >
-              <NavLink to={item.to}>{item.label}</NavLink>
+              <NavLink
+                to={item.to}
+                className={({ isActive }) =>
+                  isActive ? "font-extrabold" : "font-normal"
+                }
+                end
+              >
+                {item.label}
+              </NavLink>
             </li>
           ))}
         </ul>
