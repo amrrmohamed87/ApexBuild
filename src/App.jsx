@@ -4,7 +4,7 @@ import Error from "./pages/Error.jsx";
 import Home from "./pages/Home.jsx";
 import Transfer from "./pages/Transfer.jsx";
 import Income from "./pages/Income.jsx";
-import Contact from "./pages/Contact.jsx";
+import Login from "./pages/Login.jsx";
 
 const router = createBrowserRouter([
   {
@@ -15,9 +15,9 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "/transfer", element: <Transfer /> },
       { path: "/income", element: <Income /> },
-      { path: "/contact", element: <Contact /> },
     ],
   },
+  { path: "/login", element: <Login /> },
 ]);
 
 function App() {
