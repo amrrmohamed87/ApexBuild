@@ -25,15 +25,17 @@ function Navbar() {
   return (
     <header className="z-10 absolute">
       <nav
-        className={`fixed w-full h-24 max-w-[1536px] mx-auto transition-all duration-300 ${
-          isScrolled ? "bg-[#2a2a2c] shadow-lg" : "bg-transparent shadow-none"
+        className={`fixed w-full h-16 max-w-[1536px] mx-auto transition-all duration-300 ${
+          isScrolled
+            ? "md:bg-[#2a2a2c] md:bg-opacity-90 md:shadow-lg"
+            : "bg-transparent shadow-none"
         }`}
       >
         <ul className="hidden md:flex justify-center items-center">
           {navLinks.map((item) => (
             <li
               key={item.label}
-              className={`text-white p-8 hover:animate-pulse ${
+              className={`text-white p-4 hover:animate-pulse ${
                 !isScrolled && "font-bold"
               }`}
             >
@@ -52,7 +54,7 @@ function Navbar() {
 
         <div
           onClick={handleSidebar}
-          className="flex justify-end items-end cursor-pointer p-6 text-white md:hidden"
+          className="flex justify-end cursor-pointer p-6 text-white md:hidden"
         >
           {!isSidebar && <AiOutlineMenu size={20} />}
         </div>
@@ -63,7 +65,7 @@ function Navbar() {
               : "fixed top-0 bottom-0 right-[-100%] ease-in-out w-[60%] duration-500"
           }
         >
-          <div>
+          <div className="flex justify-start">
             <button onClick={handleSidebar} className="text-white m-2">
               {isSidebar && <AiOutlineClose size={20} />}
             </button>
