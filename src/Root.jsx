@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "./components/Navbar.jsx";
+import LeftSiderbar from "./components/LeftSidebar";
 function RootLayout() {
   return (
     <>
-      <Navbar />
+      <LeftSiderbar />
       <Outlet />
     </>
   );

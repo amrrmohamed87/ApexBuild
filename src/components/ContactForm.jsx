@@ -6,7 +6,7 @@ function ContactForm() {
   }
 
   return (
-    <fieldset className="border text-white p-3 m-3 rounded">
+    <fieldset className="border text-white p-3 m-3 rounded border-gray-500">
       <legend className="md:text-[25px] px-4 font-semibold">Contact Us</legend>
       <Form onSubmit={handleSubmit}>
         <div className="flex justify-center items-center gap-2 mb-8">
@@ -17,7 +17,7 @@ function ContactForm() {
               type="text"
               name="firstname"
               required
-              className="w-[160px] md:w-[180px] rounded text-[#151515] font-medium outline-none px-2 py-2"
+              className="w-[160px] md:w-[180px] rounded bg-black border-2 border-gray-500 text-white font-medium outline-none px-2 py-2"
             />
           </div>
           <div>
@@ -27,7 +27,7 @@ function ContactForm() {
               type="text"
               name="lastname"
               required
-              className="w-[160px] md:w-[180px] rounded text-[#151515] font-medium outline-none px-2 py-2"
+              className="w-[160px] md:w-[180px] rounded bg-black border-2 border-gray-500 text-white font-medium outline-none px-2 py-2"
             />
           </div>
         </div>
@@ -38,7 +38,7 @@ function ContactForm() {
             type="number"
             name="phone"
             required
-            className="w-[350px] md:w-[380px] rounded text-[#151515] font-medium outline-none px-2 py-2"
+            className="w-[350px] md:w-[380px] rounded bg-black border-2 border-gray-500 text-white font-medium outline-none px-2 py-2"
           />
         </div>
         <div className="flex flex-col mb-8">
@@ -48,7 +48,7 @@ function ContactForm() {
             type="email"
             name="email"
             required
-            className="w-[350px] md:w-[380px] rounded text-[#151515] font-medium outline-none px-2 py-2"
+            className="w-[350px] md:w-[380px] rounded bg-black border-2 border-gray-500 text-white font-medium outline-none px-2 py-2"
           />
         </div>
         <div className="flex flex-col mb-4">
@@ -57,7 +57,7 @@ function ContactForm() {
             id="message"
             required
             name="message"
-            className="w-[350px] md:w-[380px] h-[100px] rounded text-[#151515] font-medium outline-none px-2 py-2"
+            className="w-[350px] md:w-[380px] h-[100px] rounded bg-black border-2 border-gray-500 text-white font-medium outline-none px-2 py-2"
           />
         </div>
         <div className="flex justify-end">

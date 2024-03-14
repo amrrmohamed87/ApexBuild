@@ -1,6 +1,6 @@
-function Hero({ src, title, description }) {
+function Hero({ src, title, description, id }) {
   return (
-    <section className="relative">
+    <section className="relative" id={id}>
       <img
         src={src}
         className="object-cover object-center w-full h-[895px] md:h-[700px]"

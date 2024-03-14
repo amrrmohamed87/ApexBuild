@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-scroll";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
-import { navLinks } from "../constants/data.js";
+import { navLinks } from "../constants/data.jsx";
 
 function Navbar() {
   const [isSidebar, setIsSidebar] = useState(false);
@@ -27,7 +27,7 @@ function Navbar() {
       <nav
         className={`fixed w-full h-16 max-w-[1536px] mx-auto transition-all duration-300 ${
           isScrolled
-            ? "md:bg-[#2a2a2c] md:bg-opacity-90 md:shadow-lg"
+            ? "md:bg-[#2a2a2c]  md:shadow-lg"
             : "bg-transparent shadow-none"
         }`}
       >
@@ -35,19 +35,21 @@ function Navbar() {
           {navLinks.map((item) => (
             <li
               key={item.label}
-              className={`text-white p-4 hover:animate-pulse ${
+              className={`text-white p-4 px-20 md:px-10 hover:animate-pulse ${
                 !isScrolled && "font-bold"
               }`}
             >
-              <NavLink
+              <Link
                 to={item.to}
+                duration={10}
+                offset={-90}
                 className={({ isActive }) =>
                   isActive ? "font-extrabold" : "font-normal"
                 }
                 end
               >
                 {item.label}
-              </NavLink>
+              </Link>
             </li>
           ))}
         </ul>
@@ -75,15 +77,16 @@ function Navbar() {
               key={item.label}
               className="text-white m-2 pt-2 mb-6 hover:animate-pulse"
             >
-              <NavLink
+              <Link
                 to={item.to}
+                duration={10}
                 className={({ isActive }) =>
                   isActive ? "font-extrabold" : "font-normal"
                 }
                 end
               >
                 {item.label}
-              </NavLink>
+              </Link>
             </li>
           ))}
         </ul>
