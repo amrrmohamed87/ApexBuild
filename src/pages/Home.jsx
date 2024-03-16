@@ -89,11 +89,8 @@ function Home() {
             </h1>
             <hr className="w-1/2 ml-4 md:w-full" />
             <p className="p-4 text-white md:mb-4 font-medium">
-              Ready to revolutionize your construction collaboration and
-              streamline product exchange? Reach out to us today and discover
-              how ApexBuild can elevate your business with its user-friendly
-              interface and innovative features. Let's build success together –
-              contact us now to get started!
+              Ready to transform your construction projects with ConstructMeta?
+              Reach out to us today and let's build the future together!
             </p>
             <Icon title="+(20)-1028971276">
               <FaPhoneAlt size={20} className="text-gradient" />
