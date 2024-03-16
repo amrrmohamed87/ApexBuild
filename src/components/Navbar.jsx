@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, Events } from "react-scroll";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { navLinks } from "../constants/data.jsx";
+import { NavLink } from "react-router-dom";
 
 function Navbar() {
   const [isSidebar, setIsSidebar] = useState(false);
@@ -76,7 +77,9 @@ function Navbar() {
             </li>
           ))}
         </ul>
-
+        <button className="text-white">
+          <NavLink to="/login">Sign in</NavLink>
+        </button>
         <div
           onClick={handleSidebar}
           className="flex justify-end cursor-pointer p-6 text-white md:hidden"
