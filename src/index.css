@@ -75,6 +75,10 @@
   }
 }
 
+.text-gradient {
+  text-gradient: linear-gradient(to right, #6366f1, #a855f7, #ec4899);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -83,6 +87,6 @@
 }
 
 body {
-  background-color: #151515;
+  background-color: black;
   font-family: "Montserrat", sans-serif;
 }

@@ -4,16 +4,19 @@ import monthlyInvoicesImage from "../assets/monthly-invoices.jpg";
 import inspectionImage from "../assets/Inspection.jpg";
 import progress1 from "../assets/progress1.jpg";
 
-import transfer from "../assets/transfer (2).png";
-import tracking from "../assets/tracking.png";
-import search from "../assets/search.png";
-import invoices from "../assets/monthly-bill.png";
-import growth from "../assets/growth.png";
+import transfer from "../svg/transfer-feature.svg";
+import tracking from "../svg/tracking.svg";
+import invoices from "../svg/invoices.svg";
+import search from "../svg/inspect.svg";
+import growth from "../svg/progress.svg";
 
 import { TbTransfer } from "react-icons/tb";
 import { LuHistory } from "react-icons/lu";
 import { RiFolderReceivedLine } from "react-icons/ri";
 import { LuLayoutDashboard } from "react-icons/lu";
+import { CiSquareQuestion } from "react-icons/ci";
+import { FaUserPlus } from "react-icons/fa";
+import { FaBalanceScaleRight } from "react-icons/fa";
 
 export const navLinks = [
   { label: "Home", to: "home" },
@@ -30,8 +33,15 @@ export const sidebarLinks = [
     icon: <LuLayoutDashboard size={20} />,
   },
   { label: "Transfer", to: "/transfer", icon: <TbTransfer size={20} /> },
+  { label: "Balance", to: "/balance", icon: <FaBalanceScaleRight size={20} /> },
   { label: "History", to: "/history", icon: <LuHistory /> },
   { label: "Income", to: "/income", icon: <RiFolderReceivedLine /> },
+  {
+    label: "Request",
+    to: "/request",
+    icon: <CiSquareQuestion size={20} />,
+  },
+  { label: "Create user", to: "/createUser", icon: <FaUserPlus size={20} /> },
 ];
 
 export const features = [

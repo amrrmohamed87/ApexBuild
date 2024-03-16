@@ -53,6 +53,8 @@ function History() {
     });
   };
 
+  const status = localStorage.getItem("status");
+
   return (
     <main>
       <section className="relative w-full h-[100px] mb-8 sm:mb-4">
@@ -93,6 +95,7 @@ function History() {
                 <TableCell>{order.driverName}</TableCell>
                 <TableCell>{order.fromProject.name}</TableCell>
                 <TableCell>{order.toProject.name}</TableCell>
+                <TableCell>{status}</TableCell>
               </TableRow>
             ))}
           </TableBody>

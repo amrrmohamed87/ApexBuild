@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-scroll";
+import { Link, Events } from "react-scroll";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { navLinks } from "../constants/data.jsx";
 
 function Navbar() {
   const [isSidebar, setIsSidebar] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeLink, setActiveLink] = useState("");
 
   function handleScroll() {
     const scrollTop = window.scrollY;
@@ -14,8 +15,18 @@ function Navbar() {
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
+
+    Events.scrollEvent.register("begin", function () {
+      console.log("begin", arguments);
+    });
+
+    Events.scrollEvent.register("end", function () {
+      console.log("end", arguments);
+    });
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      Events.scrollEvent.remove("begin");
+      Events.scrollEvent.remove("end");
     };
   }, []);
 
@@ -24,10 +35,21 @@ function Navbar() {
   }
   return (
     <header className="z-10 absolute">
+      <style>
+        {`
+          .text-gradient {
+            background: linear-gradient(to right, #6366F1, #A855F7, #EC4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-fill-color: transparent;
+          }
+        `}
+      </style>
       <nav
         className={`fixed w-full h-16 max-w-[1536px] mx-auto transition-all duration-300 ${
           isScrolled
-            ? "md:bg-[#2a2a2c]  md:shadow-lg"
+            ? "md:bg-[rgba(12,12,12,0.9)] md:shadow-lg"
             : "bg-transparent shadow-none"
         }`}
       >
@@ -35,18 +57,19 @@ function Navbar() {
           {navLinks.map((item) => (
             <li
               key={item.label}
-              className={`text-white p-4 px-20 md:px-10 hover:animate-pulse ${
+              className={`text-white p-4 px-20 md:px-10 hover:cursor-pointer hover:animate-pulse ${
                 !isScrolled && "font-bold"
               }`}
             >
               <Link
                 to={item.to}
-                duration={10}
-                offset={-90}
-                className={({ isActive }) =>
-                  isActive ? "font-extrabold" : "font-normal"
+                spy={true}
+                duration={500}
+                offset={-70}
+                onSetActive={() => setActiveLink(item.label)}
+                className={
+                  activeLink === item.label ? "text-gradient" : "text-white"
                 }
-                end
               >
                 {item.label}
               </Link>

@@ -52,8 +52,8 @@ function LeftSiderbar() {
       <nav
         className={`${
           isSidebar ? "flex" : "hidden"
-        } fixed top-0 md:flex px-6 py-10 flex-col justify-between h-screen min-w-[270px] max-w-[300px] bg-black
-        } transition-all duration-300`}
+        } fixed top-0 md:flex px-4 py-4 flex-col justify-between h-screen min-w-[270px] max-w-[300px] bg-black
+         transition-all duration-300`}
       >
         <div className="flex flex-col gap-11">
           <Link to="/dashboard" className="flex gap-1 items-center">
@@ -69,9 +69,7 @@ function LeftSiderbar() {
             />
 
             <div className="flex flex-col">
-              <p className="text-[#40E0D0] max-w-[50px] text-ellipsis overflow-hidden whitespace-nowrap">
-                {name}
-              </p>
+              <p className="text-[#40E0D0]">{name}</p>
               <p className="text-[#40E0D0] text-opacity-30 max-w-[200px] text-ellipsis overflow-hidden whitespace-nowrap">
                 {email}
               </p>
@@ -99,7 +97,7 @@ function LeftSiderbar() {
           </ul>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <button className="text-blue-500 hover:bg-[#40E0D0] hover:text-black transition-all duration-300 flex items-center justify-center gap-1 py-2 rounded ">
+              <button className="text-blue-500 hover:bg-[#40E0D0] hover:text-black transition-all duration-300 flex items-center justify-center gap-1 py-2 rounded">
                 <BiLogOut /> <p>Logout</p>
               </button>
             </AlertDialogTrigger>
