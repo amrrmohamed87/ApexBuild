@@ -49,7 +49,7 @@ function Home() {
             </div>
           ))}
         </div> */}
-        <h1 className="text-gradient text-center text-[55px] font-bold tracking-widest text-[#40E0D0] mt-12">
+        <h1 className="text-gradient text-center text-[35px] md:text-[55px] font-bold tracking-widest text-[#40E0D0] mt-12">
           Our Features
         </h1>
 
@@ -65,11 +65,11 @@ function Home() {
       </section>
       <section id="services">Services</section>
       <section className="md:h-screen md:mt-40" id="about-us">
-        <h1 className="text-2xl text-gradient tracking-widest font-bold ml-4 mt-16 md:text-center md:text-[45px] md:mt-24 mb-24">
+        <h1 className="text-2xl text-gradient tracking-widest font-bold ml-4 mt-16 md:text-center md:text-[45px] md:mt-24 md:mb-24">
           What's ConstructMeta
         </h1>
         <div className="flex flex-col justify-center items-center md:flex-row md:gap-6">
-          <p className="text-white tracking-widr p-4 md:w-1/2 md:text-[25px]">
+          <p className="text-white tracking-wider p-4 md:w-1/2 md:text-[25px]">
             Our Formwork Material Management System provides a comprehensive
             solution for accurate material allocation, real-time tracking, and
             comprehensive cost control, revolutionising construction operations.
@@ -81,7 +81,7 @@ function Home() {
           <img src={aboutImage} className="w-[350px] md:w-[550px]" />
         </div>
       </section>
-      <section className="md:h-screen mb-12 md:mb-0" id="contact-us">
+      <section className="md:h-screen mt-12 mb-12 md:mb-0" id="contact-us">
         <div className="md:flex md:justify-between md:items-center md:gap-16">
           <div className="md:mr-16 md:ml-20">
             <h1 className="text-gradient text-2xl font-bold ml-4 md:text-[45px] md:mb-8">

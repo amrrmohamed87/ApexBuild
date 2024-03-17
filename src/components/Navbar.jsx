@@ -77,9 +77,7 @@ function Navbar() {
             </li>
           ))}
         </ul>
-        <button className="text-white">
-          <NavLink to="/login">Sign in</NavLink>
-        </button>
+
         <div
           onClick={handleSidebar}
           className="flex justify-end cursor-pointer p-6 text-white md:hidden"
