@@ -31,7 +31,7 @@ function Hero({ src, title, description, id }) {
             }}
             className="px-6 py-2 rounded-lg"
           >
-            <NavLink>Sign in</NavLink>
+            <NavLink to="/login">Sign in</NavLink>
           </button>
         </div>
       </div>
