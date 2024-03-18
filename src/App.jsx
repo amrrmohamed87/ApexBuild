@@ -15,6 +15,8 @@ import Login from "./pages/Login.jsx";
 import Transfer from "./pages/Transfer.jsx";
 import { action as logoutAction } from "./pages/Logout.js";
 import Dashboard from "./pages/Dashboard.jsx";
+import NewUser from "./pages/NewUser.jsx";
+import Balance from "./pages/Balance.jsx";
 
 //import { action as confirmAction } from "./pages/NewTransfer.jsx";
 function PrivateRoutes({ children }) {
@@ -55,6 +57,14 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "balance",
+        element: (
+          <PrivateRoutes>
+            <Balance />
+          </PrivateRoutes>
+        ),
+      },
+      {
         path: "history",
         element: (
           <PrivateRoutes>
@@ -67,6 +77,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoutes>
             <Income />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "createUser",
+        element: (
+          <PrivateRoutes>
+            <NewUser />
           </PrivateRoutes>
         ),
       },
