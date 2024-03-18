@@ -42,6 +42,7 @@ function Transfer() {
           throw new Error("Could not fetch items.");
         }
         const resData = await response.json();
+
         setItems(resData.data);
       } catch (error) {
         setAddError(error.message || "Could not fetch items.");
@@ -217,12 +218,12 @@ function Transfer() {
   return (
     <main>
       {/* Static content or headers */}
-      <section className="relative w-full h-[100px] mb-8 sm:mb-8">
-        <div className="absolute mt-16 flex flex-col ml-28 sm:mt-16 sm:ml-[34.4%] md:ml-[22%] lg:ml-[45%]">
+      <section className="mb-8 sm:mb-8">
+        <div className="mt-16 flex flex-col ml-28 sm:mt-16 sm:ml-[34.4%] md:ml-[22%] lg:ml-[45%]">
           <h1 className="text-white font-semibold sm:text-[35px]">
             Transfer Your Order Now
           </h1>
-          <hr />
+          <hr className="w-[40px]" />
         </div>
       </section>
 

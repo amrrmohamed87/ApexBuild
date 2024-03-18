@@ -23,7 +23,7 @@ function Hero({ src, title, description, id }) {
         <p className="font-medium text-[14px] ml-4 md:text-[24px] tracking-widest md:ml-48">
           {description}
         </p>
-        <div className="absolute mt-40 flex justify-center items-center">
+        <div className="absolute mt-40  md:mt-60 flex justify-center items-center">
           <button
             style={{
               background:
