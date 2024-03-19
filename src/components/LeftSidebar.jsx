@@ -55,7 +55,7 @@ function LeftSiderbar() {
         } fixed top-0 md:flex px-4 py-4 flex-col justify-between h-screen min-w-[270px] max-w-[300px] bg-[#0f0419]
          transition-all duration-300`}
       >
-        <div className="flex flex-col gap-11">
+        <div className="flex flex-col gap-3">
           <Link to="/dashboard" className="flex gap-1 items-center">
             <p className="text-[#40E0D0] text-[25px]">ConstructMeta</p>
             <img src={logo} alt="logo" width={40} height={20} />

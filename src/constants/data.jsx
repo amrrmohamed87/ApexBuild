@@ -17,6 +17,7 @@ import { LuLayoutDashboard } from "react-icons/lu";
 import { CiSquareQuestion } from "react-icons/ci";
 import { FaUserPlus } from "react-icons/fa";
 import { FaBalanceScaleRight } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 
 export const navLinks = [
   { label: "Home", to: "home" },
@@ -34,6 +35,7 @@ export const sidebarLinks = [
   },
   { label: "Transfer", to: "/transfer", icon: <TbTransfer size={20} /> },
   { label: "Balance", to: "/balance", icon: <FaBalanceScaleRight size={20} /> },
+  { label: "Items Editor", to: "/items-editor", icon: <FaEdit size={20} /> },
   { label: "History", to: "/history", icon: <LuHistory /> },
   { label: "Income", to: "/income", icon: <RiFolderReceivedLine /> },
   {
@@ -41,7 +43,7 @@ export const sidebarLinks = [
     to: "/request",
     icon: <CiSquareQuestion size={20} />,
   },
-  { label: "Create user", to: "/createUser", icon: <FaUserPlus size={20} /> },
+  { label: "User", to: "/user", icon: <FaUserPlus size={20} /> },
 ];
 
 export const features = [
