@@ -46,8 +46,10 @@ function NewUser() {
         }
       );
 
+      const resData = await response.json();
+
       if (!response.ok) {
-        const errorMessage = "Failed to create user";
+        const errorMessage = resData.message || "Failed to create user";
         console.log(errorMessage);
         toast.error(errorMessage);
         setIsAddingUser(false);
