@@ -17,6 +17,7 @@ import { action as logoutAction } from "./pages/Logout.js";
 import Dashboard from "./pages/Dashboard.jsx";
 import NewUser from "./pages/NewUser.jsx";
 import Balance from "./pages/Balance.jsx";
+import ItemsEditor from "./pages/ItemsEditor.jsx";
 
 //import { action as confirmAction } from "./pages/NewTransfer.jsx";
 function PrivateRoutes({ children }) {
@@ -57,6 +58,14 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "items-editor",
+        element: (
+          <PrivateRoutes>
+            <ItemsEditor />
+          </PrivateRoutes>
+        ),
+      },
+      {
         path: "balance",
         element: (
           <PrivateRoutes>
@@ -81,7 +90,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "createUser",
+        path: "user",
         element: (
           <PrivateRoutes>
             <NewUser />
