@@ -35,6 +35,13 @@ function ItemsEditor() {
     event.preventDefault();
     setIsCreating(true);
 
+    const data = {
+      itemDescription: createItems.itemDescription,
+      code: createItems.code,
+      Weight: createItems.Weight,
+      sellingPrice: createItems.sellingPrice,
+      purchasingPrice: createItems.purchasingPrice,
+    };
     try {
       const respone = await fetch(
         "https://apex-build.onrender.com/api/v1/item-description",
@@ -43,7 +50,7 @@ function ItemsEditor() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(createItems),
+          body: JSON.stringify(data),
         }
       );
       const resData = await respone.json();
@@ -51,6 +58,7 @@ function ItemsEditor() {
       if (!respone.ok) {
         const errorMessage = resData.message || "Could not Create Item";
         toast.error(errorMessage);
+        console.log(errorMessage);
         setIsCreating(false);
         return;
       }
