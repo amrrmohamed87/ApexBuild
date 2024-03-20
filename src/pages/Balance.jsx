@@ -1,21 +1,39 @@
 import { useEffect, useState } from "react";
+
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { MdDeleteSweep } from "react-icons/md";
+import { CiEdit } from "react-icons/ci";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Balance() {
+  //Storing items into itemDescription state
   const [itemDescription, setItemDescription] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [addError, setAddError] = useState("");
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [updatedItem, setUpdatedItem] = useState({
+  //Create Balances
+  const [createBalance, setCreateBalance] = useState({
     itemDescription: "",
     itemId: "",
     good: "",
     maintenance: "",
     waste: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  //Show balances
+  const [showBalances, setShowBalances] = useState([]);
+  const [isLoadingBalances, setIsLoadingBalances] = useState(false);
 
   useEffect(() => {
     async function loadItems() {
@@ -46,13 +64,13 @@ function Balance() {
         (item) => item.itemDescription === value
       );
 
-      setUpdatedItem((prev) => ({
+      setCreateBalance((prev) => ({
         ...prev,
         itemId: selectedItem ? selectedItem._id : "",
         [name]: value,
       }));
     } else {
-      setUpdatedItem((prev) => ({
+      setCreateBalance((prev) => ({
         ...prev,
         [name]: value,
       }));
@@ -64,10 +82,10 @@ function Balance() {
     setIsSubmitting(true);
 
     const data = {
-      itemDescription: updatedItem.itemId,
-      good: parseInt(updatedItem.good, 10),
-      maintenance: parseInt(updatedItem.maintenance, 10),
-      waste: parseInt(updatedItem.waste, 10),
+      itemDescription: createBalance.itemId,
+      good: parseInt(createBalance.good, 10),
+      maintenance: parseInt(createBalance.maintenance, 10),
+      waste: parseInt(createBalance.waste, 10),
     };
     console.log(data);
 
@@ -94,7 +112,7 @@ function Balance() {
 
       toast.success("Created Successfully");
       setIsSubmitting(false);
-      setUpdatedItem({
+      setCreateBalance({
         itemDescription: "",
         itemId: "",
         good: "",
@@ -104,7 +122,7 @@ function Balance() {
     } catch (error) {
       toast.error("Unexpected error occurred");
       setIsSubmitting(false);
-      setUpdatedItem({
+      setCreateBalance({
         itemDescription: "",
         itemId: "",
         good: "",
@@ -114,14 +132,45 @@ function Balance() {
     }
   };
 
+  //show balances
+  useEffect(() => {
+    async function LoadBalances() {
+      setIsLoadingBalances(true);
+
+      try {
+        const response = await fetch(
+          "https://apex-build.onrender.com/api/v1/balance"
+        );
+        const resData = await response.json();
+        console.log(resData);
+
+        if (!response.ok) {
+          const errorMessage = resData.message || "Could not fetch balances";
+          toast.error(errorMessage);
+          setIsLoadingBalances(false);
+          return;
+        }
+
+        setShowBalances(resData.data);
+        console.log(showBalances);
+        setIsLoadingBalances(false);
+      } catch (error) {
+        toast.error("unexpected error");
+        setIsLoadingBalances(false);
+      }
+    }
+    LoadBalances();
+  }, []);
+
   return (
     <main>
       <section className="mt-16 mb-8 sm:mb-8">
         <h1 className="text-white ml-28 sm:mt-16 sm:ml-[34.4%] md:ml-[22%] lg:ml-[25%] font-semibold sm:text-[35px]">
-          Create Balance
+          Tracking Balances
         </h1>
       </section>
 
+      {/* Creating Balances */}
       <section>
         <ToastContainer />
         <form
@@ -141,7 +190,7 @@ function Balance() {
                 <select
                   id="itemDescription"
                   name="itemDescription"
-                  value={updatedItem.itemDescription}
+                  value={createBalance.itemDescription}
                   onChange={handleChange}
                   className="w-full h-6 rounded-[10px] pl-2 outline-none border-2 border-gray-400 focus:border focus:border-blue-500 sm:h-8"
                   disabled={isLoading}
@@ -166,7 +215,7 @@ function Balance() {
                 id="good"
                 name="good"
                 type="number"
-                value={updatedItem.good}
+                value={createBalance.good}
                 onChange={handleChange}
                 required
                 className="w-full h-6 rounded-[10px] pl-2 border-2 border-gray-400 outline-none focus:border focus:border-blue-500 sm:h-8"
@@ -180,7 +229,7 @@ function Balance() {
                 id="maintenance"
                 name="maintenance"
                 type="number"
-                value={updatedItem.maintenance}
+                value={createBalance.maintenance}
                 onChange={handleChange}
                 required
                 className="w-full h-6 rounded-[10px] pl-2 border-2 border-gray-400 outline-none focus:border focus:border-blue-500 sm:h-8"
@@ -194,7 +243,7 @@ function Balance() {
                 id="waste"
                 name="waste"
                 type="number"
-                value={updatedItem.waste}
+                value={createBalance.waste}
                 onChange={handleChange}
                 required
                 className="w-full h-6 rounded-[10px] pl-2 border-2 border-gray-400 outline-none focus:border focus:border-blue-500 sm:h-8"
@@ -213,6 +262,49 @@ function Balance() {
           </div>
         </form>
       </section>
+
+      {/*show balances */}
+      {isLoadingBalances ? (
+        <p className="text-white text-center">Loading...</p>
+      ) : (
+        <section className="m-4">
+          <Table className="w-[200px] md:w-[1000px] md:ml-80">
+            <TableCaption>A list of your recent Balances.</TableCaption>
+            <TableHeader className="bg-white">
+              <TableRow>
+                <TableHead className="text-black md:w-[200px]">Items</TableHead>
+                <TableHead className="text-black">Good QTY</TableHead>
+                <TableHead className="text-black">Maintenance QTY</TableHead>
+                <TableHead className="text-black">Waste QTY</TableHead>
+                <TableHead className="text-black">Actual QTY</TableHead>
+                <TableHead className="text-black">Total QTY</TableHead>
+                <TableHead className="text-black">Update</TableHead>
+                <TableHead className="text-black">Delete</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="bg-slate-100">
+              {showBalances.map((balance, index) => (
+                <TableRow key={index} className="text-blue-900">
+                  <TableCell>
+                    {balance.itemDescription.itemDescription}
+                  </TableCell>
+                  <TableCell>{balance.good}</TableCell>
+                  <TableCell>{balance.maintenance}</TableCell>
+                  <TableCell>{balance.waste}</TableCell>
+                  <TableCell>{balance.actQTY}</TableCell>
+                  <TableCell>{balance.totQTY}</TableCell>
+                  <TableCell>
+                    <CiEdit size={20} className="text-blue-800" />
+                  </TableCell>
+                  <TableCell>
+                    <MdDeleteSweep size={20} className="text-red-600" />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </section>
+      )}
     </main>
   );
 }
