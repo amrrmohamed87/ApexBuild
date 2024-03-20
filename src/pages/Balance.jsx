@@ -10,6 +10,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { FaFillDrip } from "react-icons/fa6";
+import { IoIosAddCircleOutline } from "react-icons/io";
 import { MdDeleteSweep } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 import { ToastContainer, toast } from "react-toastify";
@@ -173,94 +186,6 @@ function Balance() {
       {/* Creating Balances */}
       <section>
         <ToastContainer />
-        <form
-          method="post"
-          onSubmit={handleCreateBalance}
-          className="flex items-center justify-center md:mr-48"
-        >
-          <div className="m-4 max-w-[500px] bg-white p-4 rounded-md">
-            <h1>Fill items</h1>
-            <div className="flex flex-col justify-start items-start mb-4">
-              <label htmlFor="itemDescription" className="text-black mb-2">
-                Item Description:
-              </label>
-              {isLoading ? (
-                <p className="text-lg text-blue-500">Loading...</p>
-              ) : (
-                <select
-                  id="itemDescription"
-                  name="itemDescription"
-                  value={createBalance.itemDescription}
-                  onChange={handleChange}
-                  className="w-full h-6 rounded-[10px] pl-2 outline-none border-2 border-gray-400 focus:border focus:border-blue-500 sm:h-8"
-                  disabled={isLoading}
-                >
-                  <option value="">Select Item...</option>
-                  {itemDescription.map((item, index) => (
-                    <option key={index} value={item.itemDescription}>
-                      {item.itemDescription}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </div>
-
-            <h1 className="my-4">Item Conditions:</h1>
-
-            <div className="flex flex-col justify-start items-start">
-              <label htmlFor="good" className="text-black mb-2">
-                Good
-              </label>
-              <input
-                id="good"
-                name="good"
-                type="number"
-                value={createBalance.good}
-                onChange={handleChange}
-                required
-                className="w-full h-6 rounded-[10px] pl-2 border-2 border-gray-400 outline-none focus:border focus:border-blue-500 sm:h-8"
-              />
-            </div>
-            <div className="flex flex-col justify-start items-start">
-              <label htmlFor="maintenance" className="text-black mb-2">
-                Maintenance
-              </label>
-              <input
-                id="maintenance"
-                name="maintenance"
-                type="number"
-                value={createBalance.maintenance}
-                onChange={handleChange}
-                required
-                className="w-full h-6 rounded-[10px] pl-2 border-2 border-gray-400 outline-none focus:border focus:border-blue-500 sm:h-8"
-              />
-            </div>
-            <div className="flex flex-col justify-start items-start">
-              <label htmlFor="waste" className="text-black mb-2">
-                Waste
-              </label>
-              <input
-                id="waste"
-                name="waste"
-                type="number"
-                value={createBalance.waste}
-                onChange={handleChange}
-                required
-                className="w-full h-6 rounded-[10px] pl-2 border-2 border-gray-400 outline-none focus:border focus:border-blue-500 sm:h-8"
-              />
-            </div>
-
-            <div className="flex items-center justify-center mt-6">
-              <button
-                disabled={isSubmitting}
-                type="submit"
-                className="bg-blue-500 px-8 py-2 rounded-md"
-              >
-                {isSubmitting ? "Creating..." : "Create"}
-              </button>
-            </div>
-          </div>
-        </form>
       </section>
 
       {/*show balances */}
@@ -278,6 +203,7 @@ function Balance() {
                 <TableHead className="text-black">Waste QTY</TableHead>
                 <TableHead className="text-black">Actual QTY</TableHead>
                 <TableHead className="text-black">Total QTY</TableHead>
+                <TableHead className="text-black">Create</TableHead>
                 <TableHead className="text-black">Update</TableHead>
                 <TableHead className="text-black">Delete</TableHead>
               </TableRow>
@@ -293,6 +219,131 @@ function Balance() {
                   <TableCell>{balance.waste}</TableCell>
                   <TableCell>{balance.actQTY}</TableCell>
                   <TableCell>{balance.totQTY}</TableCell>
+                  <TableCell>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <button>
+                          <IoIosAddCircleOutline
+                            size={18}
+                            className="text-emerald-500"
+                          />
+                        </button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Create Balance</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Refill Balance for items.
+                          </AlertDialogDescription>
+                          <form
+                            method="post"
+                            className="flex items-center justify-cente"
+                          >
+                            <div className="m-4 max-w-[500px] bg-white p-4 rounded-md">
+                              <h1>Fill items</h1>
+                              <div className="flex flex-col justify-start items-start mb-4">
+                                <label
+                                  htmlFor="itemDescription"
+                                  className="text-black mb-2"
+                                >
+                                  Item Description:
+                                </label>
+                                {isLoading ? (
+                                  <p className="text-lg text-blue-500">
+                                    Loading...
+                                  </p>
+                                ) : (
+                                  <select
+                                    id="itemDescription"
+                                    name="itemDescription"
+                                    value={createBalance.itemDescription}
+                                    onChange={handleChange}
+                                    className="w-full h-6 rounded-[10px] pl-2 outline-none border-2 border-gray-400 focus:border focus:border-blue-500 sm:h-8"
+                                    disabled={isLoading}
+                                  >
+                                    <option value="">Select Item...</option>
+                                    {itemDescription.map((item, index) => (
+                                      <option
+                                        key={index}
+                                        value={item.itemDescription}
+                                      >
+                                        {item.itemDescription}
+                                      </option>
+                                    ))}
+                                  </select>
+                                )}
+                              </div>
+
+                              <h1 className="my-4">Item Conditions:</h1>
+
+                              <div className="flex flex-col justify-start items-start">
+                                <label
+                                  htmlFor="good"
+                                  className="text-black mb-2"
+                                >
+                                  Good
+                                </label>
+                                <input
+                                  id="good"
+                                  name="good"
+                                  type="number"
+                                  value={createBalance.good}
+                                  onChange={handleChange}
+                                  required
+                                  className="w-full h-6 rounded-[10px] pl-2 border-2 border-gray-400 outline-none focus:border focus:border-blue-500 sm:h-8"
+                                />
+                              </div>
+                              <div className="flex flex-col justify-start items-start">
+                                <label
+                                  htmlFor="maintenance"
+                                  className="text-black mb-2"
+                                >
+                                  Maintenance
+                                </label>
+                                <input
+                                  id="maintenance"
+                                  name="maintenance"
+                                  type="number"
+                                  value={createBalance.maintenance}
+                                  onChange={handleChange}
+                                  required
+                                  className="w-full h-6 rounded-[10px] pl-2 border-2 border-gray-400 outline-none focus:border focus:border-blue-500 sm:h-8"
+                                />
+                              </div>
+                              <div className="flex flex-col justify-start items-start">
+                                <label
+                                  htmlFor="waste"
+                                  className="text-black mb-2"
+                                >
+                                  Waste
+                                </label>
+                                <input
+                                  id="waste"
+                                  name="waste"
+                                  type="number"
+                                  value={createBalance.waste}
+                                  onChange={handleChange}
+                                  required
+                                  className="w-full h-6 rounded-[10px] pl-2 border-2 border-gray-400 outline-none focus:border focus:border-blue-500 sm:h-8"
+                                />
+                              </div>
+                            </div>
+                          </form>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <button
+                            onClick={handleCreateBalance}
+                            disabled={isSubmitting}
+                            type="submit"
+                            className="bg-blue-500 px-8 py-2 rounded-md"
+                          >
+                            {isSubmitting ? "Creating..." : "Create"}
+                          </button>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </TableCell>
                   <TableCell>
                     <CiEdit size={20} className="text-blue-800" />
                   </TableCell>
