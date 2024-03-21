@@ -52,12 +52,12 @@ function LeftSiderbar() {
       <nav
         className={`${
           isSidebar ? "flex" : "hidden"
-        } fixed top-0 md:flex px-4 py-4 flex-col justify-between h-screen min-w-[270px] max-w-[300px] bg-[#0f0419]
+        } fixed top-0 md:flex px-4 py-4 flex-col justify-between h-screen min-w-[270px] max-w-[300px] bg-gradient-to-b from-[#12100E] to-[#2B4162]
          transition-all duration-300`}
       >
         <div className="flex flex-col gap-3">
           <Link to="/dashboard" className="flex gap-1 items-center">
-            <p className="text-[#40E0D0] text-[25px]">ConstructMeta</p>
+            <p className="text-white text-[25px]">ConstructMeta</p>
             <img src={logo} alt="logo" width={40} height={20} />
           </Link>
 
@@ -69,11 +69,11 @@ function LeftSiderbar() {
             />
 
             <div className="flex flex-col">
-              <p className="text-[#40E0D0]">{name}</p>
-              <p className="text-[#40E0D0] text-opacity-30 max-w-[200px] text-ellipsis overflow-hidden whitespace-nowrap">
+              <p className="text-white">{name}</p>
+              <p className="text-white text-opacity-30 max-w-[200px] text-ellipsis overflow-hidden whitespace-nowrap">
                 {email}
               </p>
-              <p className="text-[#40E0D0] text-opacity-30 max-w-[150px] text-ellipsis overflow-hidden whitespace-nowrap">
+              <p className="text-white text-opacity-30 max-w-[150px] text-ellipsis overflow-hidden whitespace-nowrap">
                 {company}
               </p>
             </div>
@@ -81,12 +81,12 @@ function LeftSiderbar() {
 
           <ul className="flex flex-col gap-6">
             {sidebarLinks.map((link) => (
-              <li key={link.label} className="text-blue-500">
+              <li key={link.label} className="text-white">
                 <NavLink
                   to={link.to}
                   className={({ isActive }) =>
                     isActive
-                      ? "bg-[#40E0D0] flex items-center gap-2 p-2 rounded text-black"
+                      ? "bg-[#04030a] flex items-center gap-2 p-2 rounded text-white"
                       : "bg-transparent flex items-center gap-2 p-2 rounded hover:bg-[#40E0D0] transition-all duration-300 hover:text-black"
                   }
                 >
