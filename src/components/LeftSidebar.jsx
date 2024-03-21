@@ -52,7 +52,7 @@ function LeftSiderbar() {
       <nav
         className={`${
           isSidebar ? "flex" : "hidden"
-        } fixed top-0 md:flex px-4 py-4 flex-col justify-between h-screen min-w-[270px] max-w-[300px] bg-gradient-to-b from-[#12100E] to-[#2B4162]
+        } fixed top-0 md:flex px-4 py-4 flex-col justify-between h-screen min-w-[270px] max-w-[300px] bg-[#060614]
          transition-all duration-300`}
       >
         <div className="flex flex-col gap-3">
