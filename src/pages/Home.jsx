@@ -17,7 +17,7 @@ import { features } from "@/constants/data";
 
 function Home() {
   return (
-    <main>
+    <main className="bg-black">
       <style>
         {`
           .text-gradient {
