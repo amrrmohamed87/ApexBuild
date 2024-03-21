@@ -65,7 +65,7 @@ function History() {
     <main>
       <section className="mb-8 sm:mb-8">
         <div className="mt-16 flex flex-col ml-28 sm:mt-16 sm:ml-[34.4%] md:ml-[22%] lg:ml-[45%]">
-          <h1 className="text-white font-semibold sm:text-[35px]">
+          <h1 className="text-black font-semibold sm:text-[35px]">
             Transfer History
           </h1>
           <hr className="w-[40px]" />

@@ -224,7 +224,7 @@ function Balance() {
   return (
     <main>
       <section className="mt-16 mb-8 sm:mb-8">
-        <h1 className="text-white ml-28 sm:mt-16 sm:ml-[34.4%] md:ml-[22%] lg:ml-[25%] font-semibold sm:text-[35px]">
+        <h1 className="text-black ml-28 sm:mt-16 sm:ml-[34.4%] md:ml-[22%] lg:ml-[25%] font-semibold sm:text-[35px]">
           Tracking Balances
         </h1>
       </section>

@@ -80,7 +80,7 @@ function ItemsEditor() {
 
   return (
     <main>
-      <h1 className="text-white text-center mt-20 mb-8">Items Editor</h1>
+      <h1 className="text-black text-center mt-20 mb-8">Items Editor</h1>
       <section>
         <ToastContainer />
         <Tabs
