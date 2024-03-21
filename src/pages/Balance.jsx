@@ -48,6 +48,16 @@ function Balance() {
   const [showBalances, setShowBalances] = useState([]);
   const [isLoadingBalances, setIsLoadingBalances] = useState(false);
 
+  //Deleting Balances
+  const [isDeletingBalances, setIsDeletingBalances] = useState(false);
+
+  //Update Balances
+  const [updateBalance, setIsUpdateBalance] = useState({
+    good: "",
+    maintenance: "",
+    waste: "",
+  });
+
   useEffect(() => {
     async function loadItems() {
       setIsLoading(true);
@@ -90,8 +100,7 @@ function Balance() {
     }
   }
 
-  const handleCreateBalance = async (event) => {
-    event.preventDefault();
+  const handleCreateBalance = async () => {
     setIsSubmitting(true);
 
     const data = {
@@ -174,6 +183,43 @@ function Balance() {
     }
     LoadBalances();
   }, []);
+
+  //Delete balance
+  const handleDeleteBalance = async (id) => {
+    setIsDeletingBalances(true);
+
+    try {
+      const response = await fetch(
+        `https://apex-build.onrender.com/api/v1/balance/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const resData = await response.json();
+
+      if (!response.ok) {
+        const errorMessage = resData.message || "Failed to Delete Balances";
+        toast.error(errorMessage);
+        console.log(errorMessage);
+        setIsDeletingBalances(false);
+        return;
+      }
+
+      toast.success("Balance Deleted Successfully");
+      setShowBalances((prevBalances) =>
+        prevBalances.filter((balance) => balance._id !== id)
+      );
+      setIsDeletingBalances(false);
+    } catch (error) {
+      toast.error("Unexpected Error");
+      setIsDeletingBalances(false);
+    }
+  };
+
+  //Update Balances
 
   return (
     <main>
@@ -332,6 +378,130 @@ function Balance() {
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                           <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction>
+                            <button
+                              onClick={handleCreateBalance}
+                              disabled={isSubmitting}
+                              type="submit"
+                              className="bg-blue-500 px-8 py-2 rounded-md"
+                            >
+                              {isSubmitting ? "Creating..." : "Create"}
+                            </button>
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </TableCell>
+                  <TableCell>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <button>
+                          <CiEdit size={20} className="text-blue-800" />
+                        </button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Create Balance</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Refill Balance for items.
+                          </AlertDialogDescription>
+                          <form
+                            method="post"
+                            className="flex items-center justify-cente"
+                          >
+                            <div className="m-4 max-w-[500px] bg-white p-4 rounded-md">
+                              <h1>Fill items</h1>
+                              <div className="flex flex-col justify-start items-start mb-4">
+                                <label
+                                  htmlFor="itemDescription"
+                                  className="text-black mb-2"
+                                >
+                                  Item Description:
+                                </label>
+                                {isLoading ? (
+                                  <p className="text-lg text-blue-500">
+                                    Loading...
+                                  </p>
+                                ) : (
+                                  <select
+                                    id="itemDescription"
+                                    name="itemDescription"
+                                    value={createBalance.itemDescription}
+                                    onChange={handleChange}
+                                    className="w-full h-6 rounded-[10px] pl-2 outline-none border-2 border-gray-400 focus:border focus:border-blue-500 sm:h-8"
+                                    disabled={isLoading}
+                                  >
+                                    <option value="">Select Item...</option>
+                                    {itemDescription.map((item, index) => (
+                                      <option
+                                        key={index}
+                                        value={item.itemDescription}
+                                      >
+                                        {item.itemDescription}
+                                      </option>
+                                    ))}
+                                  </select>
+                                )}
+                              </div>
+
+                              <h1 className="my-4">Item Conditions:</h1>
+
+                              <div className="flex flex-col justify-start items-start">
+                                <label
+                                  htmlFor="good"
+                                  className="text-black mb-2"
+                                >
+                                  Good
+                                </label>
+                                <input
+                                  id="good"
+                                  name="good"
+                                  type="number"
+                                  value={createBalance.good}
+                                  onChange={handleChange}
+                                  required
+                                  className="w-full h-6 rounded-[10px] pl-2 border-2 border-gray-400 outline-none focus:border focus:border-blue-500 sm:h-8"
+                                />
+                              </div>
+                              <div className="flex flex-col justify-start items-start">
+                                <label
+                                  htmlFor="maintenance"
+                                  className="text-black mb-2"
+                                >
+                                  Maintenance
+                                </label>
+                                <input
+                                  id="maintenance"
+                                  name="maintenance"
+                                  type="number"
+                                  value={createBalance.maintenance}
+                                  onChange={handleChange}
+                                  required
+                                  className="w-full h-6 rounded-[10px] pl-2 border-2 border-gray-400 outline-none focus:border focus:border-blue-500 sm:h-8"
+                                />
+                              </div>
+                              <div className="flex flex-col justify-start items-start">
+                                <label
+                                  htmlFor="waste"
+                                  className="text-black mb-2"
+                                >
+                                  Waste
+                                </label>
+                                <input
+                                  id="waste"
+                                  name="waste"
+                                  type="number"
+                                  value={createBalance.waste}
+                                  onChange={handleChange}
+                                  required
+                                  className="w-full h-6 rounded-[10px] pl-2 border-2 border-gray-400 outline-none focus:border focus:border-blue-500 sm:h-8"
+                                />
+                              </div>
+                            </div>
+                          </form>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
                           <button
                             onClick={handleCreateBalance}
                             disabled={isSubmitting}
@@ -345,10 +515,38 @@ function Balance() {
                     </AlertDialog>
                   </TableCell>
                   <TableCell>
-                    <CiEdit size={20} className="text-blue-800" />
-                  </TableCell>
-                  <TableCell>
-                    <MdDeleteSweep size={20} className="text-red-600" />
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <button>
+                          <MdDeleteSweep size={20} className="text-red-600" />
+                        </button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete the balance of this item and remove it from
+                            our servers.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction>
+                            <button
+                              onClick={() => handleDeleteBalance(balance._id)}
+                              disabled={isDeletingBalances}
+                              type="submit"
+                              className="bg-blue-500 px-8 py-2 rounded-md"
+                            >
+                              {isDeletingBalances ? "Deleting..." : "Delete"}
+                            </button>
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </TableCell>
                 </TableRow>
               ))}
