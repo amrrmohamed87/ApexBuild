@@ -231,13 +231,13 @@ function Transfer() {
 
       <section>
         <form className="flex flex-col justify-center items-start md:flex-row">
-          <div className="bg-black shadow-2xl rounded-[10px] p-4 m-4 md:ml-24">
-            <h1 className="text-center text-blue-500">
+          <div className="bg-white shadow-2xl rounded-[10px] p-4 m-4 md:ml-24">
+            <h1 className="text-center font-bold text-gray-950">
               Formwork & Scaffolding Transfer
             </h1>
-            <h2 className="text-blue-500 mb-2 mt-4">Item Details:</h2>
+            <h2 className="text-gray-950 font-bold mb-2 mt-4">Item Details:</h2>
             <div className="flex flex-col justify-start items-start mb-4">
-              <label htmlFor="itemDescription" className="text-white mb-2">
+              <label htmlFor="itemDescription" className="text-gray-950 mb-2">
                 Item Description:
               </label>
               {isLoading ? (
@@ -248,7 +248,7 @@ function Transfer() {
                   name="itemDescription"
                   onChange={handleChange}
                   value={orderData.itemId}
-                  className="w-full h-6 rounded-[10px] pl-2 outline-none focus:border focus:border-blue-500 sm:h-8"
+                  className="w-full h-6 rounded-[10px] pl-2 border-2 border-gray-300 focus:border-blue-500 sm:h-8"
                   disabled={isLoading}
                 >
                   <option value="">Select Item...</option>
@@ -262,7 +262,7 @@ function Transfer() {
             </div>
             <div className="flex justify-between items-center">
               <div className="flex flex-col justify-start items-start">
-                <label htmlFor="itemCondition" className="text-white mb-2">
+                <label htmlFor="itemCondition" className="text-gray-950 mb-2">
                   Item Condition
                 </label>
                 {itemConditions.length > 0 && (
@@ -272,7 +272,7 @@ function Transfer() {
                     value={orderData.itemCondition}
                     onChange={handleChange}
                     required
-                    className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none focus:border focus:border-blue-500 sm:h-8"
+                    className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none border-2 border-gray-300 focus:border-blue-500 sm:h-8"
                   >
                     {itemConditions.map((item, index) => (
                       <option key={index} value={item.value}>
@@ -283,7 +283,7 @@ function Transfer() {
                 )}
               </div>
               <div className="flex flex-col justify-start items-start">
-                <label htmlFor="quantity" className="text-white mb-2">
+                <label htmlFor="quantity" className="text-gray-950 mb-2">
                   Quantity
                 </label>
                 <input
@@ -293,14 +293,16 @@ function Transfer() {
                   value={orderData.quantity}
                   onChange={handleChange}
                   required
-                  className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none focus:border focus:border-blue-500 sm:h-8"
+                  className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none border-2 border-gray-300 focus:border-blue-500 sm:h-8"
                 />
               </div>
             </div>
-            <h2 className="text-blue-500 mb-2 mt-4">Transfer Details:</h2>
+            <h2 className="text-gray-950 font-bold mb-2 mt-4">
+              Transfer Details:
+            </h2>
             <div className="flex justify-between items-center">
               <div className="flex flex-col justify-start items-start">
-                <label htmlFor="driverName" className="text-white mb-2">
+                <label htmlFor="driverName" className="text-gray-950 mb-2">
                   Driver Name
                 </label>
                 <input
@@ -310,11 +312,11 @@ function Transfer() {
                   onChange={handleChange}
                   type="text"
                   required
-                  className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none focus:border focus:border-blue-500 sm:h-8"
+                  className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none border-2 border-gray-300 focus:border-blue-500 sm:h-8"
                 />
               </div>
               <div className="flex flex-col justify-start items-start">
-                <label htmlFor="transferDate" className="text-white mb-2">
+                <label htmlFor="transferDate" className="text-gray-950 mb-2">
                   Transfer Date
                 </label>
                 <input
@@ -324,14 +326,14 @@ function Transfer() {
                   value={orderData.transferDate}
                   onChange={handleChange}
                   required
-                  className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none focus:border focus:border-blue-500 sm:h-8"
+                  className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none border-2 border-gray-300 focus:border-blue-500 sm:h-8"
                 />
               </div>
             </div>
-            <h2 className="text-blue-500 mb-2 mt-4">Projects:</h2>
+            <h2 className="text-gray-950 font-bold mb-2 mt-4">Projects:</h2>
             <div className="flex justify-between items-center mb-4">
               <div className="flex flex-col justify-start items-start">
-                <label htmlFor="fromProject" className="text-white mb-2">
+                <label htmlFor="fromProject" className="text-gray-950 mb-2">
                   From
                 </label>
                 {projects.length > 0 && (
@@ -341,7 +343,7 @@ function Transfer() {
                     value={orderData.fromProject}
                     onChange={handleChange}
                     required
-                    className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none focus:border focus:border-blue-500 sm:h-8"
+                    className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none border-2 border-gray-300 focus:border-blue-500 sm:h-8"
                   >
                     <option value="">Source...</option>
                     {projects.map((project, index) => (
@@ -353,7 +355,7 @@ function Transfer() {
                 )}
               </div>
               <div className="flex flex-col justify-start items-start">
-                <label htmlFor="toProject" className="text-white mb-2">
+                <label htmlFor="toProject" className="text-gray-950 mb-2">
                   To
                 </label>
                 {projects.length > 0 && (
@@ -363,7 +365,7 @@ function Transfer() {
                     value={orderData.toProject}
                     onChange={handleChange}
                     required
-                    className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none focus:border focus:border-blue-500 sm:h-8"
+                    className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none border-2 border-gray-300 focus:border-blue-500 sm:h-8"
                   >
                     <option value="">Destination...</option>
                     {projects.map((project, index) => (
@@ -376,35 +378,41 @@ function Transfer() {
               </div>
             </div>
           </div>
-          <div className="bg-black shadow-2xl rounded-[10px] p-4 m-4">
-            <h1 className="text-center text-blue-500">Confirm Your Order</h1>
+          <div className="bg-white shadow-2xl rounded-[10px] p-4 m-4">
+            <h1 className="text-center text-gray-950 font-bold">
+              Confirm Your Order
+            </h1>
             <div>
-              <h1 className="text-white mb-2">
-                <span className="text-blue-500">Item Description:</span>
+              <h1 className="text-gray-950 mb-2">
+                <span className="text-gray-950 font-bold">
+                  Item Description:{" "}
+                </span>
                 {orderData.itemDescription}
               </h1>
-              <h1 className="text-white mb-2">
-                <span className="text-blue-500">Item Condition: </span>
+              <h1 className="text-gray-950 mb-2">
+                <span className="text-gray-950 font-bold">
+                  Item Condition:{" "}
+                </span>
                 {orderData.itemCondition}
               </h1>
-              <h1 className="text-white mb-2">
-                <span className="text-blue-500">Quantity: </span>
+              <h1 className="text-gray-950 mb-2">
+                <span className="text-gray-950 font-bold">Quantity: </span>
                 {orderData.quantity}
               </h1>
-              <h1 className="text-white mb-2">
-                <span className="text-blue-500">Driver name: </span>
+              <h1 className="text-gray-950 mb-2">
+                <span className="text-gray-950 font-bold">Driver name: </span>
                 {orderData.driverName}
               </h1>
-              <h1 className="text-white mb-2">
-                <span className="text-blue-500">Transfer Date: </span>
+              <h1 className="text-gray-950 mb-2">
+                <span className="text-gray-950 font-bold">Transfer Date: </span>
                 {orderData.transferDate}
               </h1>
-              <h1 className="text-white mb-2">
-                <span className="text-blue-500">Source: </span>
+              <h1 className="text-gray-950 mb-2">
+                <span className="text-gray-950 font-bold">Source: </span>
                 {orderData.fromProject}
               </h1>
-              <h1 className="text-white mb-2">
-                <span className="text-blue-500">Destination: </span>
+              <h1 className="text-gray-950 mb-2">
+                <span className="text-gray-950 font-bold">Destination: </span>
                 {orderData.toProject}
               </h1>
             </div>
@@ -429,19 +437,23 @@ function Transfer() {
             method="post"
             className="flex flex-col justify-center items-start md:flex-row ml-0 md:ml-40"
           >
-            <div className="bg-black shadow-2xl rounded-[10px] p-4 m-4 sm:p-8 sm:m-8">
-              <h2 className="text-blue-500 text-center text-lg mb-4">
+            <div className="bg-white shadow-2xl rounded-[10px] p-4 m-4 sm:p-8 sm:m-8">
+              <h2 className="text-gray-950 font-bold text-center text-lg mb-4">
                 Added Orders
               </h2>
               <div className="flex flex-col  md:grid md:grid-flow-row md:grid-cols-3 md:place-content-center">
                 {orders.map((order, index) => (
                   <div key={index} className="text-white mb-6">
-                    <p className="mb-1">
-                      <span className="text-blue-500">Item Description: </span>
+                    <p className="mb-1 text-gray-950">
+                      <span className="text-gray-950 font-bold">
+                        Item Description:{" "}
+                      </span>
                       {order.itemDescription}
                     </p>
-                    <p>
-                      <span className="text-blue-500">Quantity: </span>
+                    <p className="text-gray-950">
+                      <span className="text-gray-950 font-bold">
+                        Quantity:{" "}
+                      </span>
                       {order.quantity}
                     </p>
                     <div className="flex justify-start items-center gap-4 mt-3">
