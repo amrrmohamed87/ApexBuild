@@ -52,42 +52,39 @@ function LeftSiderbar() {
       <nav
         className={`${
           isSidebar ? "flex" : "hidden"
-        } fixed top-0 md:flex px-4 py-4 flex-col justify-between h-screen min-w-[270px] max-w-[300px] bg-[#020206]
+        } fixed top-0 md:flex px-2 py-4 flex-col justify-between h-screen min-w-[210px] max-w-[250px] bg-[#18202e]
          transition-all duration-300`}
       >
         <div className="flex flex-col gap-3">
           <Link to="/dashboard" className="flex gap-1 items-center">
             <p className="text-white text-[25px]">ConstructMeta</p>
-            <img src={logo} alt="logo" width={40} height={20} />
+            <img src={logo} alt="logo" width={30} height={20} />
           </Link>
 
           <Link className="flex items-center gap-3">
             <img
               src={avatar}
               alt="profile-pic"
-              className="h-14 w-14 rounded-full"
+              className="h-10 w-10 rounded-full"
             />
 
             <div className="flex flex-col">
               <p className="text-white">{name}</p>
-              <p className="text-white text-opacity-30 max-w-[200px] text-ellipsis overflow-hidden whitespace-nowrap">
-                {email}
-              </p>
               <p className="text-white text-opacity-30 max-w-[150px] text-ellipsis overflow-hidden whitespace-nowrap">
                 {company}
               </p>
             </div>
           </Link>
 
-          <ul className="flex flex-col gap-6">
+          <ul className="flex flex-col gap-6 m-1">
             {sidebarLinks.map((link) => (
-              <li key={link.label} className="text-white">
+              <li key={link.label} className="text-white text-opacity-35">
                 <NavLink
                   to={link.to}
                   className={({ isActive }) =>
                     isActive
-                      ? "bg-[#04030a] flex items-center gap-2 p-2 rounded text-white"
-                      : "bg-transparent flex items-center gap-2 p-2 rounded hover:bg-[#40E0D0] transition-all duration-300 hover:text-black"
+                      ? "bg-[#414142] flex items-center gap-2 p-2 rounded text-white"
+                      : "bg-transparent flex items-center gap-2 p-2 rounded transition-all duration-300 hover:text-white"
                   }
                 >
                   {link.icon} {link.label}
@@ -97,7 +94,7 @@ function LeftSiderbar() {
           </ul>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <button className="text-blue-500 hover:bg-[#40E0D0] hover:text-black transition-all duration-300 flex items-center justify-center gap-1 py-2 rounded">
+              <button className="text-white text-opacity-35 hover:bg-[#40E0D0] hover:text-black transition-all duration-300 flex items-center justify-start gap-1 px-2 py-2 rounded">
                 <BiLogOut /> <p>Logout</p>
               </button>
             </AlertDialogTrigger>
