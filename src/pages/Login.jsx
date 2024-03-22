@@ -79,7 +79,7 @@ function Login() {
       />
 
       <div className="p-4 pt-[50%] w-full md:w-1/2 md:pt-0 md:mx-[11%] md:my-[11%]">
-        <Card className="bg-black w-[400px] shadow-2xl border-gray-500">
+        <Card className="bg-black min-w-[300px] max-w-[400px] shadow-2xl border-gray-500">
           <form method="post" onSubmit={handleLogin}>
             <CardHeader>
               <CardTitle className="text-blue-500">Login</CardTitle>
