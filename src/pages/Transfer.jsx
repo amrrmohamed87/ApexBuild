@@ -419,7 +419,7 @@ function Transfer() {
             <div className="text-center mt-4">
               <button
                 onClick={handleAddOrder}
-                className="bg-blue-700 rounded-[10px] text-white py-1 px-8 hover:bg-blue-800 hover:font-semibold"
+                className="bg-[#1e293b] rounded-[10px] text-white py-1 px-8 hover:bg-[#0f172a] hover:font-semibold"
               >
                 Add Item
               </button>
