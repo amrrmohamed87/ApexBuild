@@ -10,6 +10,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { Check, ChevronsUpDown } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,6 +44,19 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Balance() {
+  const projects = [
+    {
+      value: "IKEA",
+      label: "IKEA",
+    },
+    {
+      value: "Mivida",
+      label: "Mivida",
+    },
+  ];
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState("");
+
   //Storing items into itemDescription state
   const [itemDescription, setItemDescription] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -224,9 +252,50 @@ function Balance() {
   return (
     <main>
       <section className="mt-16 mb-8 sm:mb-8">
-        <h1 className="text-black ml-28 sm:mt-16 sm:ml-[34.4%] md:ml-[22%] lg:ml-[25%] font-semibold sm:text-[35px]">
-          Tracking Balances
-        </h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-black ml-28 sm:ml-[34.4%] md:ml-[22%] lg:ml-[25%] font-semibold sm:text-[35px]">
+            Balances
+          </h1>
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+              <Button className="w-[200px] justify-between">
+                {value
+                  ? frameworks.find((framework) => framework.value === value)
+                      ?.label
+                  : "Select project..."}
+                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[200px] p-0">
+              <Command>
+                <CommandInput placeholder="Search framework..." />
+                <CommandEmpty>No framework found.</CommandEmpty>
+                <CommandGroup>
+                  {projects.map((framework) => (
+                    <CommandItem
+                      key={framework.value}
+                      value={framework.value}
+                      onSelect={(currentValue) => {
+                        setValue(currentValue === value ? "" : currentValue);
+                        setOpen(false);
+                      }}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          value === framework.value
+                            ? "opacity-100"
+                            : "opacity-0"
+                        )}
+                      />
+                      {framework.label}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
       </section>
 
       {/* Creating Balances */}
@@ -244,14 +313,12 @@ function Balance() {
             <TableHeader className="bg-white">
               <TableRow>
                 <TableHead className="text-black md:w-[200px]">Items</TableHead>
+                <TableHead className="text-black md:w-[200px]">Code</TableHead>
                 <TableHead className="text-black">Good QTY</TableHead>
                 <TableHead className="text-black">Maintenance QTY</TableHead>
                 <TableHead className="text-black">Waste QTY</TableHead>
-                <TableHead className="text-black">Actual QTY</TableHead>
                 <TableHead className="text-black">Total QTY</TableHead>
-                <TableHead className="text-black">Create</TableHead>
-                <TableHead className="text-black">Update</TableHead>
-                <TableHead className="text-black">Delete</TableHead>
+                <TableHead className="text-black">Actual QTY</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody className="bg-slate-100">
@@ -260,12 +327,13 @@ function Balance() {
                   <TableCell>
                     {balance.itemDescription.itemDescription}
                   </TableCell>
+                  <TableCell>{balance.itemDescription.code}</TableCell>
                   <TableCell>{balance.good}</TableCell>
                   <TableCell>{balance.maintenance}</TableCell>
                   <TableCell>{balance.waste}</TableCell>
-                  <TableCell>{balance.actQTY}</TableCell>
                   <TableCell>{balance.totQTY}</TableCell>
-                  <TableCell>
+                  <TableCell>{balance.actQTY}</TableCell>
+                  {/* <TableCell>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <button>
@@ -391,8 +459,8 @@ function Balance() {
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
-                  </TableCell>
-                  <TableCell>
+                  </TableCell> */}
+                  {/* <TableCell>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <button>
@@ -513,8 +581,8 @@ function Balance() {
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
-                  </TableCell>
-                  <TableCell>
+                  </TableCell> */}
+                  {/* <TableCell>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <button>
@@ -547,7 +615,7 @@ function Balance() {
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))}
             </TableBody>
