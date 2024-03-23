@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-// Make sure this import path matches your actual data structure
+import Select from "react-select";
 import { itemConditions } from "../constants/data.jsx";
-/* import { ToastAction } from "@/components/ui/toast";
-import { useToast } from "@/components/ui/use-toast";
-import { Button } from "@/components/ui/button"; */
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -26,10 +24,6 @@ function Transfer() {
   const [isLoading, setIsLoading] = useState(false);
   const [addError, setAddError] = useState("");
   const [isConfirming, setIsConfirming] = useState(false);
-  const [error, setError] = useState("");
-
-  //toast
-  //const { toast } = useToast();
 
   useEffect(() => {
     async function loadItems() {

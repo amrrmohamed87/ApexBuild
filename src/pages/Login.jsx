@@ -18,7 +18,7 @@ function Login() {
     password: "",
   });
   const [isLogin, setIsLogin] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState();
   const navigate = useNavigate();
 
   function handleChange(event) {
@@ -46,7 +46,6 @@ function Login() {
       );
 
       const resData = await response.json();
-      const errorMessage = resData.message;
       const token = resData.token;
       const name = resData.user.firstName;
       const email = resData.user.email;
@@ -60,13 +59,16 @@ function Login() {
       localStorage.setItem("avatar", avatar);
 
       if (!response.ok) {
+        const errorMessage = resData.message || "Invalid Data";
         setError(errorMessage);
+        setIsLogin(false);
+        return;
       }
 
       setIsLogin(false);
       return navigate("/dashboard");
     } catch (error) {
-      setError(error.message);
+      setError("Unexpected error");
       setIsLogin(false);
     }
   };
@@ -117,9 +119,9 @@ function Login() {
                   className="p-2 w-full text-white bg-black border-2 border-gray-500 focus:border-blue-500 rounded-lg"
                 />
               </div>
+              {error && <p className="text-center text-red-500">{error}</p>}
             </CardContent>
             <CardFooter>
-              {error && <p className="text-center text-red-500">{error}</p>}
               <button
                 disabled={isLogin}
                 type="submit"
