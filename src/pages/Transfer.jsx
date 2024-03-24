@@ -7,6 +7,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 function Transfer() {
   const [items, setItems] = useState([]);
+  const itemOptions = items.map((item) => ({
+    label: item.itemDescription,
+    value: item._id,
+  }));
+  const itemCondition = itemConditions.map((item) => ({
+    label: item.condition,
+    value: item.value,
+  }));
   const [projects, setProjects] = useState([]);
   const [orders, setOrders] = useState([]);
   const [orderData, setOrderData] = useState({
@@ -225,7 +233,7 @@ function Transfer() {
 
       <section>
         <form className="flex flex-col justify-center items-start md:flex-row">
-          <div className="bg-white shadow-2xl rounded-[10px] p-4 m-4 md:ml-24">
+          <div className="bg-white shadow-lg rounded-[10px] p-4 m-4 md:ml-24">
             <h1 className="text-center font-bold text-gray-950">
               Formwork & Scaffolding Transfer
             </h1>
@@ -237,43 +245,70 @@ function Transfer() {
               {isLoading ? (
                 <p className="text-lg text-blue-500">Loading...</p>
               ) : (
-                <select
-                  id="itemDescription"
-                  name="itemDescription"
-                  onChange={handleChange}
-                  value={orderData.itemId}
-                  className="w-full h-6 rounded-[10px] pl-2 border-2 border-gray-300 focus:border-blue-500 sm:h-8"
-                  disabled={isLoading}
-                >
-                  <option value="">Select Item...</option>
-                  {items.map((item, index) => (
-                    <option key={index} value={item.itemDescription}>
-                      {item.itemDescription}
-                    </option>
-                  ))}
-                </select>
+                <Select
+                  options={itemOptions}
+                  onChange={(selectedOption) => {
+                    setOrderData((prev) => ({
+                      ...prev,
+                      itemDescription: selectedOption
+                        ? selectedOption.label
+                        : "",
+                      itemId: selectedOption ? selectedOption.value : "",
+                    }));
+                  }}
+                  value={itemOptions.find(
+                    (option) => option.value === orderData.itemId
+                  )}
+                  isLoading={isLoading}
+                  isDisabled={isLoading}
+                  className="w-full"
+                />
               )}
             </div>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center gap-20">
               <div className="flex flex-col justify-start items-start">
                 <label htmlFor="itemCondition" className="text-gray-950 mb-2">
                   Item Condition
                 </label>
                 {itemConditions.length > 0 && (
-                  <select
-                    id="itemCondition"
-                    name="itemCondition"
-                    value={orderData.itemCondition}
-                    onChange={handleChange}
-                    required
-                    className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none border-2 border-gray-300 focus:border-blue-500 sm:h-8"
-                  >
-                    {itemConditions.map((item, index) => (
-                      <option key={index} value={item.value}>
-                        {item.condition}
-                      </option>
-                    ))}
-                  </select>
+                  <Select
+                    options={itemCondition}
+                    onChange={(selectedCondition) => {
+                      setOrderData((prev) => ({
+                        ...prev,
+                        itemCondition: selectedCondition
+                          ? selectedCondition.value
+                          : "",
+                      }));
+                    }}
+                    value={itemCondition.find(
+                      (option) => option.value === orderData.itemCondition
+                    )}
+                    className="react-select"
+                    classNamePrefix="react-select"
+                    styles={{
+                      control: (provided) => ({
+                        ...provided,
+                        width: "150px", // Default width
+                        minHeight: "32px",
+                        "@media (min-width: 640px)": {
+                          width: "200px", // Width on small devices and up
+                        },
+                        borderColor: "#d1d5db", // Tailwind's border-gray-300
+                        "&:hover": {
+                          borderColor: "#bfdbfe", // Tailwind's border-blue-300 on hover
+                        },
+                        boxShadow: "none", // Removes focus shadow
+                      }),
+                      menu: (provided) => ({
+                        ...provided,
+                        width: "150px",
+                        "@media (min-width: 640px)": {
+                          width: "200px",
+                        },
+                      }),
+                    }}
+                  />
                 )}
               </div>
               <div className="flex flex-col justify-start items-start">
@@ -287,7 +322,7 @@ function Transfer() {
                   value={orderData.quantity}
                   onChange={handleChange}
                   required
-                  className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none border-2 border-gray-300 focus:border-blue-500 sm:h-8"
+                  className="w-[150px] sm:w-[200px] pl-2 outline-none border-2 border-gray-300 focus:border-blue-500 sm:h-8"
                 />
               </div>
             </div>

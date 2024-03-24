@@ -96,7 +96,6 @@ export const footerlinks = [
 ];
 
 export const itemConditions = [
-  { value: "", condition: "Choose Condition..." },
   { value: "good", condition: "Good" },
   { value: "maintenance", condition: "Maintenance" },
   { value: "waste", condition: "Waste" },
