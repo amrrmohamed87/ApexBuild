@@ -177,7 +177,7 @@ function History() {
       {isLoading ? (
         <p>Loading....</p>
       ) : (
-        <div className="flex flex-col p-6 bg-white shadow-md w-[900px] ml-80">
+        <div className="flex flex-col p-6 bg-white shadow-md w-[1100px] ml-80">
           <div className="flex justify-between items-center">
             <input
               type="text"
@@ -188,11 +188,11 @@ function History() {
             />
 
             <select
-              className="bg-gray-300 px-2 py-1 w-[100px] rounded-lg border-2 outline-none border-gray-300 focus:border-blue-500"
+              className="bg-gray-300 px-2 py-1 w-[130px] rounded-lg border-2 outline-none border-gray-300 focus:border-blue-500"
               value={statusFilter}
               onChange={handleStatusSelect} // Use the new handleStatusChange function here
             >
-              <option value="">Status</option>
+              <option value="">All</option>
               <option value="processing">Processing</option>
               <option value="unmatched">Unmatched</option>
               <option value="done">Done</option>
@@ -200,7 +200,7 @@ function History() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-[800px] divide-y divide-gray-200">
+            <table className="divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
                   <th
@@ -220,6 +220,18 @@ function History() {
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
                   >
                     Details
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
+                  >
+                    Source
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
+                  >
+                    Destination
                   </th>
                   <th
                     scope="col"
@@ -307,6 +319,12 @@ function History() {
                           </div>
                         </DialogContent>
                       </Dialog>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {order.fromProject.name}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {order.toProject.name}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       <HoverCard>
