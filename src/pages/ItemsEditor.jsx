@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -13,6 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function ItemsEditor() {
+  //Create Items States
   const [createItems, setCreateItems] = useState({
     itemDescription: "",
     code: "",
@@ -22,6 +23,7 @@ function ItemsEditor() {
   });
   const [isCreating, setIsCreating] = useState(false);
 
+  //Create Items Function
   function handleCreateItemChange(event) {
     const { name, value } = event.target;
     setCreateItems((prev) => ({
@@ -35,13 +37,6 @@ function ItemsEditor() {
     event.preventDefault();
     setIsCreating(true);
 
-    const data = {
-      itemDescription: createItems.itemDescription,
-      code: createItems.code,
-      Weight: createItems.Weight,
-      sellingPrice: createItems.sellingPrice,
-      purchasingPrice: createItems.purchasingPrice,
-    };
     try {
       const respone = await fetch(
         "https://apex-build.onrender.com/api/v1/item-description",
@@ -50,7 +45,7 @@ function ItemsEditor() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(createItems),
         }
       );
       const resData = await respone.json();
@@ -78,9 +73,41 @@ function ItemsEditor() {
     }
   };
 
+  //Get Items
+  const [items, setItems] = useState([]);
+  const [isFetching, setIsFetching] = useState(false);
+
+  useEffect(() => {
+    async function LoadItems() {
+      setIsFetching(true);
+
+      try {
+        const response = await fetch(
+          "https://apex-build.onrender.com/api/v1/item-description"
+        );
+        const resData = await response.json();
+        console.log(resData);
+
+        if (!response.ok) {
+          const errorMessage = resData.message || "Could not fetch balances";
+          toast.error(errorMessage);
+          setIsFetching(false);
+          return;
+        }
+
+        setItems(resData.data);
+        setIsFetching(false);
+      } catch (error) {
+        toast.error("unexpected error");
+        setIsFetching(false);
+      }
+    }
+    LoadItems();
+  }, []);
   return (
     <main>
       <h1 className="text-black text-center mt-20 mb-8">Items Editor</h1>
+      <section></section>
       <section>
         <ToastContainer />
         <Tabs

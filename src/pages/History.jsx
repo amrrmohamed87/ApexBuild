@@ -17,11 +17,30 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import { MdOutlineTimer } from "react-icons/md";
+import { MdNavigateNext } from "react-icons/md";
+import { GrFormPrevious } from "react-icons/gr";
+
 function History() {
   const [transferredOrders, setTransferredOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [status, setStatus] = useState();
+
+  //Query state for search and page state for pagination
+  const [query, setQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
     async function loadOrders() {
@@ -61,6 +80,89 @@ function History() {
     });
   };
 
+  //Filter Transferred Item based on query
+  const filteredData = transferredOrders.filter(
+    (order) =>
+      (order.transferId.toLowerCase().includes(query.toLowerCase()) ||
+        order.itemDescription.itemDescription
+          .toLowerCase()
+          .includes(query.toLowerCase()) ||
+        order.status.toLowerCase().includes(query.toLowerCase())) &&
+      (statusFilter
+        ? order.status.toLowerCase() === statusFilter.toLowerCase()
+        : true)
+  );
+
+  //Calculate Pagination
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+  console.log(totalPages);
+  const currentData = filteredData.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
+  const handleSearch = (event) => {
+    setQuery(event.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleStatusSelect = (event) => {
+    setStatusFilter(event.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleRowsPerPage = (event) => {
+    setRowsPerPage(event.target.value);
+    setCurrentPage(1);
+  };
+
+  function handleLastPagination() {
+    setCurrentPage(totalPages);
+  }
+
+  function handleFirstPagination() {
+    setCurrentPage(1);
+  }
+
+  const Pagination = () => (
+    <div className="flex justify-between items-center mt-4">
+      <button
+        disabled={currentPage === 1}
+        onClick={() => setCurrentPage((prev) => prev - 1)}
+        className="px-4 py-2 bg-gray-200 text-gray-800"
+      >
+        <GrFormPrevious size={20} />
+      </button>
+      <div className="flex" onClick={handleFirstPagination}>
+        <GrFormPrevious size={20} />
+        <GrFormPrevious size={20} />
+      </div>
+      <p>
+        page {currentPage} of {totalPages}
+      </p>
+      <p>
+        Rows per Page{" "}
+        <input
+          type="number"
+          value={rowsPerPage}
+          onChange={handleRowsPerPage}
+          className="border-2"
+        />
+      </p>
+      <button
+        disabled={currentPage === totalPages}
+        onClick={() => setCurrentPage((prev) => prev + 1)}
+        className="px-4 py-2 bg-gray-200 text-gray-800"
+      >
+        <MdNavigateNext size={20} />
+      </button>
+      <div className="flex" onClick={handleLastPagination}>
+        <MdNavigateNext size={20} />
+        <MdNavigateNext size={20} />
+      </div>
+    </div>
+  );
+
   return (
     <main>
       <section className="mb-8 sm:mb-8">
@@ -73,6 +175,177 @@ function History() {
       </section>
 
       {isLoading ? (
+        <p>Loading....</p>
+      ) : (
+        <div className="flex flex-col p-6 bg-white shadow-md w-[900px] ml-80">
+          <div className="flex justify-between items-center">
+            <input
+              type="text"
+              value={query}
+              onChange={handleSearch}
+              className="mb-4 px-2 py-1 w-[300px] rounded-lg outline-none border-2 border-gray-300 focus:border-blue-500"
+              placeholder="Search..."
+            />
+
+            <select
+              className="bg-gray-300 px-2 py-1 w-[100px] rounded-lg border-2 outline-none border-gray-300 focus:border-blue-500"
+              value={statusFilter}
+              onChange={handleStatusSelect} // Use the new handleStatusChange function here
+            >
+              <option value="">Status</option>
+              <option value="processing">Processing</option>
+              <option value="unmatched">Unmatched</option>
+              <option value="done">Done</option>
+            </select>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-[800px] divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 w-2 tracking-wider"
+                  >
+                    Order number
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 w-[30px] tracking-wider"
+                  >
+                    OrderId
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
+                  >
+                    Details
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
+                  >
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {currentData.map((order, index) => (
+                  <tr key={index}>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {order.orderNo}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {order.transferId}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <Dialog className="p-4">
+                        <DialogTrigger asChild>
+                          <p className="cursor-pointer">
+                            {order.itemDescription.itemDescription}
+                          </p>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[500px]">
+                          <DialogHeader>
+                            <DialogTitle>Order Details</DialogTitle>
+                            <DialogDescription>
+                              View your order in detail, click close when you're
+                              done.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="grid gap-4 py-4">
+                            <div className="flex flex-col justify-center items-start gap-4">
+                              <h1 className="text-gray-950 font-semibold">
+                                Item Description:{" "}
+                                <span className="text-black font-normal">
+                                  {order.itemDescription.itemDescription}
+                                </span>
+                              </h1>
+                              <h1 className="text-gray-950 font-semibold">
+                                Transfer Id:{" "}
+                                <span className="text-black font-normal">
+                                  {order.transferId}
+                                </span>
+                              </h1>
+                              <h1 className="text-gray-950 font-semibold">
+                                Quantity:{" "}
+                                <span className="text-black font-normal">
+                                  {order.quantity}
+                                </span>
+                              </h1>
+                              <h1 className="text-gray-950 font-semibold">
+                                Condition:{" "}
+                                <span className="text-black font-normal">
+                                  {order.itemCondition}
+                                </span>
+                              </h1>
+                              <h1 className="text-gray-950 font-semibold">
+                                Transfer Date:{" "}
+                                <span className="text-black font-normal">
+                                  {formatDate(order.transferDate)}
+                                </span>
+                              </h1>
+                              <h1 className="text-gray-950 font-semibold">
+                                Driver:{" "}
+                                <span className="text-black font-normal">
+                                  {order.driverName}
+                                </span>
+                              </h1>
+                              <h1 className="text-gray-950 font-semibold">
+                                Source:{" "}
+                                <span className="text-black font-normal">
+                                  {order.fromProject.name}
+                                </span>
+                              </h1>
+                              <h1 className="text-gray-950 font-semibold">
+                                Destination:{" "}
+                                <span className="text-black font-normal">
+                                  {order.toProject.name}
+                                </span>
+                              </h1>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <HoverCard>
+                        <HoverCardTrigger asChild>
+                          <Button
+                            variant="link"
+                            className=" first-letter:capitalize"
+                          >
+                            {order.status}
+                          </Button>
+                        </HoverCardTrigger>
+                        <HoverCardContent className="w-80">
+                          <div className="flex justify-between space-x-4">
+                            <div className="space-y-1">
+                              <h4 className="text-sm font-semibold">
+                                {order.status}
+                              </h4>
+                              <p className="text-sm">{order.orderNotes}</p>
+                            </div>
+                          </div>
+                        </HoverCardContent>
+                      </HoverCard>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Pagination />
+        </div>
+      )}
+    </main>
+  );
+}
+
+export default History;
+
+/**
+ * {isLoading ? (
         <p className="text-center text-[30px] text-blue-500">Loading...</p>
       ) : (
         <section className="p-4 m-0 ml-0 md:p-0 md:m-8 md:ml-[21rem] flex-1">
@@ -131,17 +404,8 @@ function History() {
                 </TableRow>
               ))}
             </TableBody>
-            {/* <TableFooter>
-            <TableRow>
-              <TableCell colSpan={3}>Total</TableCell>
-              <TableCell className="text-right">$2,500.00</TableCell>
-            </TableRow>
-          </TableFooter> */}
           </Table>
         </section>
       )}
-    </main>
-  );
-}
-
-export default History;
+ * 
+ */

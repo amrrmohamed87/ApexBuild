@@ -53,7 +53,7 @@ function LeftSiderbar() {
         className={`${
           isSidebar ? "flex" : "hidden"
         } fixed top-0 md:flex px-2 py-4 flex-col justify-between h-screen min-w-[210px] max-w-[250px] bg-[#18202e]
-         transition-all duration-300`}
+         transition-all duration-300 z-50`}
       >
         <div className="flex flex-col gap-3">
           <Link to="/dashboard" className="flex gap-1 items-center">

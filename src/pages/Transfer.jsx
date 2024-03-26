@@ -299,12 +299,14 @@ function Transfer() {
                           borderColor: "#bfdbfe", // Tailwind's border-blue-300 on hover
                         },
                         boxShadow: "none", // Removes focus shadow
+                        borderRadius: "10px",
                       }),
                       menu: (provided) => ({
                         ...provided,
                         width: "150px",
                         "@media (min-width: 640px)": {
                           width: "200px",
+                          zIndex: 5,
                         },
                       }),
                     }}
@@ -322,7 +324,7 @@ function Transfer() {
                   value={orderData.quantity}
                   onChange={handleChange}
                   required
-                  className="w-[150px] sm:w-[200px] pl-2 outline-none border-2 border-gray-300 focus:border-blue-500 sm:h-8"
+                  className="w-[150px] sm:w-[200px] rounded-[10px] h-12 pl-2 outline-none border-2 border-gray-300 focus:border-blue-500 sm:h-8"
                 />
               </div>
             </div>
