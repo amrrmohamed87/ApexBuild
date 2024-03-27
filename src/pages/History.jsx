@@ -30,6 +30,8 @@ import {
 import { MdOutlineTimer } from "react-icons/md";
 import { MdNavigateNext } from "react-icons/md";
 import { GrFormPrevious } from "react-icons/gr";
+import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 
 function History() {
   const [transferredOrders, setTransferredOrders] = useState([]);
@@ -125,40 +127,46 @@ function History() {
   }
 
   const Pagination = () => (
-    <div className="flex justify-between items-center mt-4">
-      <button
-        disabled={currentPage === 1}
-        onClick={() => setCurrentPage((prev) => prev - 1)}
-        className="px-4 py-2 bg-gray-200 text-gray-800"
-      >
-        <GrFormPrevious size={20} />
-      </button>
-      <div className="flex" onClick={handleFirstPagination}>
-        <GrFormPrevious size={20} />
-        <GrFormPrevious size={20} />
-      </div>
-      <p>
-        page {currentPage} of {totalPages}
-      </p>
+    <div className="flex justify-end items-center gap-6 mt-6">
       <p>
         Rows per Page{" "}
         <input
           type="number"
           value={rowsPerPage}
           onChange={handleRowsPerPage}
-          className="border-2"
+          className="w-12 pl-3 border-2 rounded-md"
         />
       </p>
-      <button
-        disabled={currentPage === totalPages}
-        onClick={() => setCurrentPage((prev) => prev + 1)}
-        className="px-4 py-2 bg-gray-200 text-gray-800"
-      >
-        <MdNavigateNext size={20} />
-      </button>
-      <div className="flex" onClick={handleLastPagination}>
-        <MdNavigateNext size={20} />
-        <MdNavigateNext size={20} />
+      <p>
+        page {currentPage} of {totalPages}
+      </p>
+      <div className="flex items-center gap-1">
+        <button
+          className="px-2 py-1 rounded-md border-2"
+          onClick={handleFirstPagination}
+        >
+          <MdKeyboardDoubleArrowLeft size={20} />
+        </button>
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((prev) => prev - 1)}
+          className="px-2 py-1 rounded-md border-2 text-gray-800"
+        >
+          <GrFormPrevious size={20} />
+        </button>
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage((prev) => prev + 1)}
+          className="px-2 py-1 rounded-md border-2 text-gray-800"
+        >
+          <MdNavigateNext size={20} />
+        </button>
+        <button
+          className="px-2 py-1 rounded-md border-2"
+          onClick={handleLastPagination}
+        >
+          <MdKeyboardDoubleArrowRight size={20} />
+        </button>
       </div>
     </div>
   );
@@ -177,7 +185,7 @@ function History() {
       {isLoading ? (
         <p>Loading....</p>
       ) : (
-        <div className="flex flex-col p-6 bg-white shadow-md w-[1100px] ml-80">
+        <div className="flex flex-col p-6 bg-white shadow-md w-[1100px] ml-80 mb-12">
           <div className="flex justify-between items-center">
             <input
               type="text"
@@ -188,7 +196,7 @@ function History() {
             />
 
             <select
-              className="bg-gray-300 px-2 py-1 w-[130px] rounded-lg border-2 outline-none border-gray-300 focus:border-blue-500"
+              className="px-2 py-1 w-[130px] rounded-lg border-2 outline-none border-gray-300 focus:border-blue-500"
               value={statusFilter}
               onChange={handleStatusSelect} // Use the new handleStatusChange function here
             >
