@@ -1,4 +1,10 @@
 import { useEffect, useState } from "react";
+import "./Select.css";
+import { motion, AnimatePresence } from "framer-motion";
+import Select from "react-select";
+import { itemConditions } from "@/constants/data";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import {
   Table,
@@ -32,6 +38,7 @@ import { MdNavigateNext } from "react-icons/md";
 import { GrFormPrevious } from "react-icons/gr";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 function History() {
   const [transferredOrders, setTransferredOrders] = useState([]);
@@ -43,6 +50,20 @@ function History() {
   const [statusFilter, setStatusFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [filter, setFilter] = useState(false);
+  const [condition, setCondition] = useState("");
+  const itemCondition = itemConditions.map((item) => ({
+    label: item.condition,
+    value: item.value,
+  }));
+  const [fromProjectOptions, setFromProjectOptions] = useState([]);
+  const [toProjectOptions, setToProjectOptions] = useState([]);
+  const [fromProjectFilter, setFromProjectFilter] = useState("");
+  const [toProjectFilter, setToProjectFilter] = useState("");
+  const [itemDescriptionOptions, setItemDescriptionOptions] = useState([]);
+  const [itemDescriptionFilter, setItemDescriptionFilter] = useState("");
+  const [transferIdOptions, setTransferIdOptions] = useState([]);
+  const [transferIdFilter, setTransferIdFilter] = useState("");
 
   useEffect(() => {
     async function loadOrders() {
@@ -59,8 +80,32 @@ function History() {
 
         const resData = await response.json();
         const data = resData.data;
-
+        console.log(data);
         setTransferredOrders(data);
+
+        const uniqueItemDescriptions = [
+          ...new Set(
+            resData.data.map((order) => order.itemDescription.itemDescription)
+          ),
+        ];
+        const fromProjectOptions = [
+          ...new Set(resData.data.map((option) => option.fromProject.name)),
+        ].map((name) => ({ label: name, value: name }));
+        const toProjectOptions = [
+          ...new Set(resData.data.map((option) => option.toProject.name)),
+        ].map((name) => ({ label: name, value: name }));
+        const transferID = [
+          ...new Set(resData.data.map((option) => option.transferId)),
+        ].map((name) => ({ label: name, value: name }));
+
+        // Update state for Select components
+        setItemDescriptionOptions(
+          uniqueItemDescriptions.map((desc) => ({ label: desc, value: desc }))
+        );
+        setFromProjectOptions(fromProjectOptions);
+        setToProjectOptions(toProjectOptions);
+        setTransferIdOptions(transferID);
+
         setIsLoading(false);
       } catch (error) {
         setError(error.message);
@@ -85,14 +130,22 @@ function History() {
   //Filter Transferred Item based on query
   const filteredData = transferredOrders.filter(
     (order) =>
-      (order.transferId.toLowerCase().includes(query.toLowerCase()) ||
+      order.transferId.toLowerCase().includes(query.toLowerCase()) &&
+      (!statusFilter ||
+        order.status.toLowerCase() === statusFilter.toLowerCase()) &&
+      (!condition ||
+        order.itemCondition.toLowerCase() === condition.toLowerCase()) &&
+      (!itemDescriptionFilter ||
         order.itemDescription.itemDescription
           .toLowerCase()
-          .includes(query.toLowerCase()) ||
-        order.status.toLowerCase().includes(query.toLowerCase())) &&
-      (statusFilter
-        ? order.status.toLowerCase() === statusFilter.toLowerCase()
-        : true)
+          .includes(itemDescriptionFilter.toLowerCase())) &&
+      (!fromProjectFilter ||
+        order.fromProject.name.toLowerCase() ===
+          fromProjectFilter.toLowerCase()) &&
+      (!toProjectFilter ||
+        order.toProject.name.toLowerCase() === toProjectFilter.toLowerCase()) &&
+      (!transferIdFilter ||
+        order.transferId.toLowerCase() === transferIdFilter.toLowerCase())
   );
 
   //Calculate Pagination
@@ -110,6 +163,11 @@ function History() {
 
   const handleStatusSelect = (event) => {
     setStatusFilter(event.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleConditionSelect = (selectedOption) => {
+    setCondition(selectedOption ? selectedOption.value : "");
     setCurrentPage(1);
   };
 
@@ -171,6 +229,11 @@ function History() {
     </div>
   );
 
+  const variants = {
+    hidden: { opacity: 0, height: 0, overflow: "hidden" },
+    visible: { opacity: 1, height: "auto" },
+  };
+
   return (
     <main>
       <section className="mb-8 sm:mb-8">
@@ -187,13 +250,20 @@ function History() {
       ) : (
         <div className="flex flex-col p-6 bg-white shadow-md w-[1100px] ml-80 mb-12">
           <div className="flex justify-between items-center">
-            <input
-              type="text"
-              value={query}
-              onChange={handleSearch}
-              className="mb-4 px-2 py-1 w-[300px] rounded-lg outline-none border-2 border-gray-300 focus:border-blue-500"
-              placeholder="Search..."
-            />
+            <button
+              className="flex items-center gap-2 bg-white shadow-md px-8 py-2 rounded-md mb-2"
+              onClick={() => {
+                setFilter(!filter);
+              }}
+            >
+              Filter
+              <motion.span
+                animate={{ rotate: filter ? -180 : 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                <MdKeyboardArrowDown size={20} />
+              </motion.span>
+            </button>
 
             <select
               className="px-2 py-1 w-[130px] rounded-lg border-2 outline-none border-gray-300 focus:border-blue-500"
@@ -206,6 +276,89 @@ function History() {
               <option value="done">Done</option>
             </select>
           </div>
+
+          <AnimatePresence>
+            {filter && (
+              <motion.div
+                initial="hidden"
+                animate={filter ? "visible" : "hidden"}
+                exit="hidden"
+                variants={variants}
+                transition={{ duration: 0.5 }}
+              >
+                {filter && (
+                  <div className="flex justify-between items-center my-6">
+                    <Select
+                      options={transferIdOptions}
+                      onChange={(option) =>
+                        setTransferIdFilter(option ? option.value : "")
+                      }
+                      value={transferIdOptions.find(
+                        (option) => option.value === transferIdFilter
+                      )}
+                      isClearable
+                      className="custom-select"
+                      classNamePrefix="react-select"
+                      placeholder="TransferID..."
+                    />
+                    <Select
+                      options={itemDescriptionOptions}
+                      onChange={(option) =>
+                        setItemDescriptionFilter(option ? option.value : "")
+                      }
+                      value={itemDescriptionOptions.find(
+                        (option) => option.value === itemDescriptionFilter
+                      )}
+                      isClearable
+                      className="custom-select"
+                      classNamePrefix="react-select"
+                      placeholder="Item..."
+                    />
+                    {itemConditions.length > 0 && (
+                      <Select
+                        options={itemCondition}
+                        onChange={handleConditionSelect}
+                        value={itemCondition.find(
+                          (option) => option.value === condition
+                        )}
+                        isClearable={true}
+                        placeholder="Condition..."
+                        className="custom-select"
+                        classNamePrefix="react-select"
+                      />
+                    )}
+                    <Select
+                      options={fromProjectOptions}
+                      onChange={(option) =>
+                        setFromProjectFilter(option ? option.value : "")
+                      }
+                      value={fromProjectOptions.find(
+                        (option) => option.value === fromProjectFilter
+                      )}
+                      isClearable
+                      className="custom-select"
+                      classNamePrefix="react-select"
+                      placeholder="Source..."
+                    />
+
+                    <Select
+                      options={toProjectOptions}
+                      onChange={(option) =>
+                        setToProjectFilter(option ? option.value : "")
+                      }
+                      value={toProjectOptions.find(
+                        (option) => option.value === toProjectFilter
+                      )}
+                      isClearable
+                      className="custom-select"
+                      classNamePrefix="react-select"
+                      placeholder="Destination..."
+                    />
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div className="overflow-x-auto">
             <table className="divide-y divide-gray-200">
@@ -370,6 +523,13 @@ function History() {
 
 export default History;
 
+/* <input
+                  type="text"
+                  value={query}
+                  onChange={handleSearch}
+                  className="mb-4 px-2 py-1 rounded-lg outline-none border-2 border-gray-300 focus:border-blue-500"
+                  placeholder="TransferID..."
+                /> */
 /**
  * {isLoading ? (
         <p className="text-center text-[30px] text-blue-500">Loading...</p>

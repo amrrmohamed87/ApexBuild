@@ -1,0 +1,9 @@
+.custom-select .react-select__control {
+  width: 200px; /* Or any width you prefer */
+  min-height: 36px;
+  border-color: #d1d5db; /* Tailwind's border-gray-300 */
+}
+
+.custom-select .react-select__control:hover {
+  border-color: #bfdbfe; /* Tailwind's border-blue-300 on hover */
+}
