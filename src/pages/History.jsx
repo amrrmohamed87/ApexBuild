@@ -266,7 +266,7 @@ function History() {
             </button>
 
             <select
-              className="px-2 py-1 w-[130px] rounded-lg border-2 outline-none border-gray-300 focus:border-blue-500"
+              className="px-2 py-1 w-[130px]  border-2 outline-none bg-white shadow-md  rounded-md border-gray-300 focus:border-blue-500"
               value={statusFilter}
               onChange={handleStatusSelect} // Use the new handleStatusChange function here
             >
