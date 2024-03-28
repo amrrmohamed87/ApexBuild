@@ -280,11 +280,11 @@ function History() {
           <AnimatePresence>
             {filter && (
               <motion.div
-                initial="hidden"
-                animate={filter ? "visible" : "hidden"}
-                exit="hidden"
-                variants={variants}
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.5 }}
+                style={{ overflow: "hidden" }}
               >
                 {filter && (
                   <div className="flex justify-between items-center my-6">
@@ -299,6 +299,10 @@ function History() {
                       isClearable
                       className="custom-select"
                       classNamePrefix="react-select"
+                      menuPortalTarget={document.body}
+                      styles={{
+                        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                      }}
                       placeholder="TransferID..."
                     />
                     <Select
@@ -312,6 +316,10 @@ function History() {
                       isClearable
                       className="custom-select"
                       classNamePrefix="react-select"
+                      menuPortalTarget={document.body}
+                      styles={{
+                        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                      }}
                       placeholder="Item..."
                     />
                     {itemConditions.length > 0 && (
@@ -324,6 +332,10 @@ function History() {
                         isClearable={true}
                         placeholder="Condition..."
                         className="custom-select"
+                        menuPortalTarget={document.body}
+                        styles={{
+                          menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                        }}
                         classNamePrefix="react-select"
                       />
                     )}
@@ -338,6 +350,10 @@ function History() {
                       isClearable
                       className="custom-select"
                       classNamePrefix="react-select"
+                      menuPortalTarget={document.body}
+                      styles={{
+                        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                      }}
                       placeholder="Source..."
                     />
 
@@ -352,6 +368,10 @@ function History() {
                       isClearable
                       className="custom-select"
                       classNamePrefix="react-select"
+                      menuPortalTarget={document.body}
+                      styles={{
+                        menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                      }}
                       placeholder="Destination..."
                     />
                   </div>

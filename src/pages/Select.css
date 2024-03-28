@@ -7,3 +7,6 @@
 .custom-select .react-select__control:hover {
   border-color: #bfdbfe; /* Tailwind's border-blue-300 on hover */
 }
+.react-select__menu {
+  z-index: 9999 !important;
+}
