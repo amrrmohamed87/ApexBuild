@@ -287,7 +287,7 @@ function History() {
                 style={{ overflow: "hidden" }}
               >
                 {filter && (
-                  <div className="flex justify-between items-center my-6">
+                  <div className="flex justify-between items-center my-6 px-1">
                     <Select
                       options={transferIdOptions}
                       onChange={(option) =>
