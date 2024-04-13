@@ -10,7 +10,7 @@ import { CiLocationArrow1 } from "react-icons/ci";
 import { MdOutlineAttachEmail } from "react-icons/md";
 import { BiTransferAlt } from "react-icons/bi";
 
-import heroImage from "../assets/homeHero.jpg";
+import heroImage from "../assets/home.jpg";
 import aboutImage from "../assets/about.jpg";
 import Navbar from "@/components/Navbar";
 import { features } from "@/constants/data";
@@ -33,7 +33,6 @@ function Home() {
       <Hero
         id="home"
         src={heroImage}
-        title="ConstructMeta"
         description="Where Vision Meets Precision"
       />
       <section id="features">
