@@ -39,7 +39,7 @@ function Navbar() {
       <style>
         {`
           .text-gradient {
-            background: linear-gradient(to right, #6366F1, #A855F7, #EC4899);
+            background: linear-gradient(to right,#EC4899, #A855F7, #6366F1);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -58,8 +58,8 @@ function Navbar() {
           {navLinks.map((item) => (
             <li
               key={item.label}
-              className={`text-white p-4 px-20 md:px-10 hover:cursor-pointer hover:animate-pulse ${
-                !isScrolled && "font-bold"
+              className={` p-4 px-20 md:px-10 hover:cursor-pointer hover:animate-pulse ${
+                !isScrolled ? "font-medium text-black" : "text-white"
               }`}
             >
               <Link
@@ -68,9 +68,7 @@ function Navbar() {
                 duration={500}
                 offset={-70}
                 onSetActive={() => setActiveLink(item.label)}
-                className={
-                  activeLink === item.label ? "text-gradient" : "text-white"
-                }
+                className={activeLink === item.label && "text-gradient"}
               >
                 {item.label}
               </Link>
