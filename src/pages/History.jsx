@@ -57,8 +57,8 @@ function History() {
     value: item.value,
   }));
   const [fromProjectOptions, setFromProjectOptions] = useState([]);
-  const [toProjectOptions, setToProjectOptions] = useState([]);
   const [fromProjectFilter, setFromProjectFilter] = useState("");
+  const [toProjectOptions, setToProjectOptions] = useState([]);
   const [toProjectFilter, setToProjectFilter] = useState("");
   const [itemDescriptionOptions, setItemDescriptionOptions] = useState([]);
   const [itemDescriptionFilter, setItemDescriptionFilter] = useState("");
@@ -283,7 +283,7 @@ function History() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.5 }}
+                transition={{ duration: 0.4 }}
                 style={{ overflow: "hidden" }}
               >
                 {filter && (
