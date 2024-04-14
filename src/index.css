@@ -97,11 +97,3 @@ body {
   font-weight: normal;
   font-style: normal;
 }
-
-@font-face {
-  font-family: "hyper";
-  src: url("C:\Users\Amr Elshemy\OneDrive - MAM (Faculty of Computer Science)\Desktop\Business\frontend\src\fonts\HyperWave\Hyperwave.otf")
-    format("opentype");
-  font-weight: normal;
-  font-style: normal;
-}

@@ -22,7 +22,6 @@ module.exports = {
       }),
       fontFamily: {
         yourFont: ['YourFont'],
-        hyper: ['hyper']
     },
       colors: {
         border: "hsl(var(--border))",
