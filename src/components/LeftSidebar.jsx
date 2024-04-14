@@ -57,7 +57,9 @@ function LeftSiderbar() {
       >
         <div className="flex flex-col gap-3">
           <Link to="/dashboard" className="flex gap-1 items-center">
-            <p className="text-white text-[25px]">ConstructMeta</p>
+            <p className="text-white text-[10px] font-yourFont">
+              ConstructMeta
+            </p>
             <img src={logo} alt="logo" width={30} height={20} />
           </Link>
 

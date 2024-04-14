@@ -20,6 +20,10 @@ module.exports = {
       backgroundImage: theme => ({
         'gradient-opacity': 'linear-gradient(to right, rgba(99, 102, 241, 0.5), rgba(168, 85, 247, 0.5), rgba(236, 72, 153, 0.5))',
       }),
+      fontFamily: {
+        yourFont: ['YourFont'],
+        hyper: ['hyper']
+    },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

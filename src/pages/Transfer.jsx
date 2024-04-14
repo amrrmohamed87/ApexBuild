@@ -409,6 +409,7 @@ function Transfer() {
               </div>
             </div>
           </div>
+
           <div className="bg-white shadow-2xl rounded-[10px] p-4 m-4">
             <h1 className="text-center text-gray-950 font-bold">
               Confirm Your Order

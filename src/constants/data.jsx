@@ -5,6 +5,7 @@ import inspectionImage from "../assets/Inspection.jpg";
 import progress1 from "../assets/progress1.jpg";
 
 import transfer from "../svg/transfer-feature.svg";
+import materialTransfer from "../assets/materialTransfer.png";
 import tracking from "../svg/tracking.svg";
 import invoices from "../svg/invoices.svg";
 import search from "../svg/inspect.svg";
@@ -48,7 +49,7 @@ export const sidebarLinks = [
 
 export const features = [
   {
-    src: transfer,
+    src: materialTransfer,
     title: "Material Transfer",
     description:
       "The process of moving or sharing resources between locations or entities, ensuring legal and efficient handling.",
@@ -65,12 +66,12 @@ export const features = [
     description:
       "Detail transactions and payments for services or goods over a month, aiding in financial management and record-keeping.",
   },
-  {
+  /*  {
     src: search,
     title: "Inspection",
     description:
       "The process of examining materials or systems to ensure they meet quality and safety standards.",
-  },
+  }, */
   {
     src: growth,
     title: "Progress Tracking",

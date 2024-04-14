@@ -8,7 +8,6 @@ import {
 import RootLayout from "./Root.jsx";
 import Error from "./pages/Error.jsx";
 import Home from "./pages/Home.jsx";
-//import NewTransfer from "./pages/NewTransfer.jsx";
 import History from "./pages/History.jsx";
 import Income from "./pages/Income.jsx";
 import Login from "./pages/Login.jsx";
@@ -18,6 +17,7 @@ import Dashboard from "./pages/Dashboard.jsx";
 import NewUser from "./pages/NewUser.jsx";
 import Balance from "./pages/Balance.jsx";
 import ItemsEditor from "./pages/ItemsEditor.jsx";
+import Request from "./pages/Request.jsx";
 
 //import { action as confirmAction } from "./pages/NewTransfer.jsx";
 function PrivateRoutes({ children }) {
@@ -86,6 +86,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoutes>
             <Income />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "request",
+        element: (
+          <PrivateRoutes>
+            <Request />
           </PrivateRoutes>
         ),
       },

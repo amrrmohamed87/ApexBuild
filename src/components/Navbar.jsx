@@ -39,11 +39,12 @@ function Navbar() {
       <style>
         {`
           .text-gradient {
-            background: linear-gradient(to right,#EC4899, #A855F7, #6366F1);
+            background: linear-gradient(to right,#ff06b3, #e3059f, #7402d1, #024abd);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             text-fill-color: transparent;
+            font-weight: bold;
           }
         `}
       </style>
@@ -59,7 +60,7 @@ function Navbar() {
             <li
               key={item.label}
               className={` p-4 px-20 md:px-10 hover:cursor-pointer hover:animate-pulse ${
-                !isScrolled ? "font-medium text-black" : "text-white"
+                !isScrolled ? "font-medium text-white" : "text-white"
               }`}
             >
               <Link

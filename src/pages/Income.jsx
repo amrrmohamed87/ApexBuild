@@ -40,7 +40,6 @@ function Income() {
   const [orderNotes, setOrderNotes] = useState("");
   const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
 
-  const [query, setQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [filter, setFilter] = useState(false);
@@ -359,8 +358,9 @@ function Income() {
               </motion.div>
             )}
           </AnimatePresence>
+
+          <ToastContainer />
           <div className="overflow-x-auto">
-            <ToastContainer />
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
