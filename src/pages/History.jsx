@@ -248,7 +248,7 @@ function History() {
       {isLoading ? (
         <p>Loading....</p>
       ) : (
-        <div className="flex flex-col p-6 bg-white shadow-md w-[1100px] ml-80 mb-12">
+        <div className="flex flex-col p-6 bg-white shadow-md w-[1100px] md:ml-[18rem] mb-12">
           <div className="flex justify-between items-center">
             <button
               className="flex items-center gap-2 bg-white shadow-md px-8 py-2 rounded-md mb-2"

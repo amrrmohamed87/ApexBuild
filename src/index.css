@@ -93,7 +93,7 @@ body {
 
 @font-face {
   font-family: "YourFont";
-  src: url("public/fonts/projectSpace.otf") format("opentype");
+  src: url("/fonts/projectSpace.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
 }

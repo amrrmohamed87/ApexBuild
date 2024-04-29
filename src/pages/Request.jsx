@@ -3,6 +3,11 @@ import Select from "react-select";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { MdNavigateNext } from "react-icons/md";
+import { GrFormPrevious } from "react-icons/gr";
+import { MdKeyboardDoubleArrowRight } from "react-icons/md";
+import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 function Request() {
   const [items, setItems] = useState([]);
@@ -20,14 +25,16 @@ function Request() {
   }));
 
   const [orderData, setOrderData] = useState({
-    itemDescription: "",
-    itemId: "",
     quantity: "",
     activity: "",
-    toProject: "",
-    toProjectId: "",
   });
+  const [isRequesting, setIsRequesting] = useState(false);
   const [orders, setOrders] = useState([]);
+
+  const quantityFilter = "";
+  const [itemDescriptionFilter, setItemDescriptionFilter] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
     async function loadItems() {
@@ -47,7 +54,7 @@ function Request() {
         setIsLoadingItems(false);
       } catch (error) {
         toast.error("Unexpected error occurred");
-        setIsLoading(false);
+        setIsLoadingItems(false);
       }
     }
     loadItems();
@@ -88,21 +95,162 @@ function Request() {
 
   function handleAddRequest(event) {
     event.preventDefault();
-    if (
-      !orderData.itemDescription ||
-      !orderData.quantity ||
-      orderData.activity <= 0
-    ) {
-      toast.error("Please fill the unfilled Inputs!");
+
+    const requestFields = {
+      itemDescription: "Item Description",
+      activity: "Activity",
+      toProject: "Destination",
+      quantity: "Quantity",
+    };
+    let missingFields = [];
+
+    for (const [key, label] of Object.entries(requestFields)) {
+      if (!orderData[key] || (key === "quantity" && orderData[key] <= 0)) {
+        missingFields.push(label);
+      }
+    }
+
+    if (missingFields.length === Object.entries(requestFields).length) {
+      toast.error("Please fill the form below then try again");
+      return;
+    } else if (missingFields.length > 0) {
+      toast.error(`Missing: ${missingFields.join(", ")}`);
       return;
     }
+
+    toast.success("One order has been added to the list");
+
     setOrders((prev) => [...prev, orderData]);
+    setOrderData({
+      quantity: "",
+      activity: "",
+    });
     console.log(orders);
   }
 
-  console.log(orderData);
+  const submittedData = orders.map((order) => ({
+    itemDescription: order.itemId,
+    activity: order.activity,
+    quantity: order.quantity,
+    toProject: order.toProjectId,
+  }));
+  console.log(submittedData);
+
+  const handleRequestOrders = async (event) => {
+    event.preventDefault();
+    setIsRequesting(true);
+    const submittedData = orders.map((order) => ({
+      itemDescription: order.itemId,
+      activity: order.activity,
+      quantity: parseInt(order.quantity, 10),
+      toProject: order.toProjectId,
+    }));
+    console.log(submittedData);
+
+    try {
+      const response = await fetch(
+        "https://apex-build.onrender.com/api/v1/request/requests",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(submittedData),
+        }
+      );
+
+      const resData = await response.json();
+
+      if (!response.ok) {
+        toast.error(resData.message || "Failed to request your f*** order");
+        setIsRequesting(false);
+        return;
+      }
+
+      toast.success("Requested Successfully");
+      setOrders([]);
+      setIsRequesting(false);
+    } catch (error) {
+      toast.error("Unexpected error occurred");
+      setIsRequesting(false);
+    }
+  };
+
+  const filteredData = orders.filter(
+    (order) =>
+      (!itemDescriptionFilter ||
+        order.itemDescription.toLowerCase() ===
+          itemDescriptionFilter.toLowerCase()) &&
+      (!quantityFilter || order.quantity.toLowerCase() === quantityFilter)
+  );
+
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+  const currentData = filteredData.slice(
+    currentPage - 1 * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
+  function handleRowsPerPage(event) {
+    setRowsPerPage(event.target.value);
+    setCurrentPage(1);
+  }
+
+  function handleFirstPagination() {
+    setCurrentPage(1);
+  }
+
+  function handleLastPagination() {
+    setCurrentPage(totalPages);
+  }
+
+  const Pagination = () => (
+    <div className="flex justify-center items-center gap-8 mt-6">
+      <p className="text-sm">
+        Rows per Page{" "}
+        <input
+          type="number"
+          value={rowsPerPage}
+          onChange={handleRowsPerPage}
+          className="w-12 pl-3 border-2 rounded-md"
+        />
+      </p>
+      <p className="text-sm">
+        page {currentPage} of {totalPages}
+      </p>
+      <div className="flex items-center gap-1">
+        <button
+          className="px-2 py-1 rounded-md border-2"
+          onClick={handleFirstPagination}
+        >
+          <MdKeyboardDoubleArrowLeft size={15} />
+        </button>
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage((prev) => prev - 1)}
+          className="px-2 py-1 rounded-md border-2 text-gray-800"
+        >
+          <GrFormPrevious size={15} />
+        </button>
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage((prev) => prev + 1)}
+          className="px-2 py-1 rounded-md border-2 text-gray-800"
+        >
+          <MdNavigateNext size={15} />
+        </button>
+        <button
+          className="px-2 py-1 rounded-md border-2"
+          onClick={handleLastPagination}
+        >
+          <MdKeyboardDoubleArrowRight size={15} />
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <>
+      <ToastContainer />
       <section className="mb-8 sm:mb-8">
         <div className="mt-16 flex flex-col ml-28 sm:mt-16 sm:ml-[34.4%] md:ml-[22%] lg:ml-[45%]">
           <h1 className="text-black font-semibold sm:text-[35px]">
@@ -113,8 +261,8 @@ function Request() {
       </section>
 
       <section>
-        <form className="flex flex-col md:flex-row">
-          <div className="flex flex-col p-6 bg-white shadow-md rounded-[5px] w-[450px] mx-auto md:ml-[17rem] mb-12">
+        <form method="post" className="flex flex-col md:flex-row gap-4">
+          <div className="flex flex-col p-6 bg-white border shadow-md rounded-[5px] w-[450px] mx-auto md:ml-[17rem] xl:ml-[16.5rem] mb-12">
             <h1 className="text-center text-gray-950 font-bold">
               Request your order
             </h1>
@@ -170,7 +318,7 @@ function Request() {
               <hr className="w-full md:w-1/2 my-6 border-gray-500" />
             </div>
 
-            <div className="flex flex-col md:flex-row justify-between">
+            <div className="flex flex-col md:flex-row md:justify-between xl:gap-4">
               {/* toProject - Destination */}
               <div className="flex flex-col justify-start items-start mb-4">
                 <label htmlFor="toProject" className="text-gray-950 mb-2">
@@ -194,7 +342,7 @@ function Request() {
                   )}
                   isLoading={isLoadingProjects}
                   isDisabled={isLoadingProjects}
-                  className="w-full md:w-[180px]"
+                  className="w-full h-6 md:h-8 md:w-[180px]"
                   isClearable
                 />
               </div>
@@ -210,7 +358,7 @@ function Request() {
                   placeholder="QTY..."
                   onChange={handleChange}
                   value={orderData.quantity}
-                  className="w-full md:w-[180px] rounded-[5px] h-8 md:h-9 pl-2 outline-none border border-gray-300 focus:border-2 focus:border-blue-500 sm:h-8"
+                  className="w-full md:w-[180px] rounded-[5px] h-6 md:h-[2.4rem] pl-2 outline-none border border-gray-300 focus:border-2 focus:border-blue-500 sm:h-8"
                 />
               </div>
             </div>
@@ -225,9 +373,8 @@ function Request() {
 
           {/* Added Requests Table */}
           {orders.length > 0 && (
-            <div className="flex flex-col p-6 bg-white shadow-md rounded-[5px] w-[700px] mx-auto  mb-12">
-              <div className="flex flex-col p-6 bg-white shadow-md rounded-lg mx-auto mb-12 w-full max-w-4xl overflow-x-auto">
-                <ToastContainer />
+            <div className="flex flex-col p-6 bg-white border shadow-md rounded-[5px] w-[700px] xl:mr-4  mb-12">
+              <div className="flex flex-col p-6 bg-white border shadow-md rounded-lg mx-auto mb-12 w-full max-w-4xl overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-700">
                     <tr>
@@ -240,7 +387,7 @@ function Request() {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {orders.map((order, index) => (
+                    {currentData.map((order, index) => (
                       <tr key={index}>
                         <td className="px-4 py-3 text-sm text-gray-900 sm:text-base">
                           {order.itemDescription}
@@ -252,6 +399,16 @@ function Request() {
                     ))}
                   </tbody>
                 </table>
+                <Pagination />
+
+                <button
+                  type="submit"
+                  disabled={isRequesting}
+                  onClick={handleRequestOrders}
+                  className="bg-[#1e293b] w-full mt-4 rounded-[5px] py-2 text-white hover:bg-[#0f172a] hover:font-semibold transition-all duration-300"
+                >
+                  {isRequesting ? "Requesting..." : "Reequest"}
+                </button>
               </div>
             </div>
           )}

@@ -1,14 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Select from "react-select";
 import { itemConditions } from "../constants/data.jsx";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 function Transfer() {
   const [items, setItems] = useState([]);
   const itemOptions = items.map((item) => ({
-    label: item.itemDescription,
+    label: item.name,
     value: item._id,
   }));
   const itemCondition = itemConditions.map((item) => ({
@@ -16,19 +27,35 @@ function Transfer() {
     value: item.value,
   }));
   const [projects, setProjects] = useState([]);
-  const [orders, setOrders] = useState([]);
+  const [isFetchingProjects, setIsFetchingProjects] = useState(false);
+  const projectOptions = projects.map((project) => ({
+    label: project.name,
+    value: project._id,
+  }));
+
   const [orderData, setOrderData] = useState({
     itemDescription: "",
     itemId: "",
     itemCondition: "",
     quantity: "",
-    driverName: "",
+  });
+  const [addedOrders, setAddedOrders] = useState([]);
+  const [orders, setOrders] = useState([]);
+  const [finalForm, setFinalForm] = useState({
+    transferNumber: "",
     transferDate: "",
     fromProject: "",
-    fromProjectId: "",
     toProject: "",
-    toProjectId: "",
+    order: [],
   });
+  /* useEffect(() => {
+    setFinalForm((prevForm) => ({
+      ...prevForm,
+      order: orders,
+    }));
+  }, [orders]); */
+  //console.log(finalForm);
+
   const [isLoading, setIsLoading] = useState(false);
   const [addError, setAddError] = useState("");
   const [isConfirming, setIsConfirming] = useState(false);
@@ -55,7 +82,7 @@ function Transfer() {
     loadItems();
   }, []);
 
-  useEffect(() => {
+  /*  useEffect(() => {
     async function loadProjects() {
       setIsLoading(true);
       try {
@@ -75,8 +102,33 @@ function Transfer() {
     }
     loadProjects();
   }, []);
+ */
+  useEffect(() => {
+    async function fetchProjects() {
+      setIsFetchingProjects(true);
+      try {
+        const response = await fetch(
+          "https://apex-build.onrender.com/api/v1/projects"
+        );
+        const resData = await response.json();
 
-  function handleChange(event) {
+        if (!response.ok) {
+          toast.error(resData.message || "Could not fetch projects");
+          setIsFetchingProjects(false);
+          return;
+        }
+
+        setProjects(resData.data);
+        setIsFetchingProjects(false);
+      } catch (error) {
+        toast.error("Unexpected Error Occurred");
+        setIsFetchingProjects(false);
+      }
+    }
+    fetchProjects();
+  }, []);
+
+  /* function handleChange(event) {
     const { name, value } = event.target;
     if (name === "itemDescription" && value) {
       const selectedItem = items.find((item) => item.itemDescription === value);
@@ -123,20 +175,119 @@ function Transfer() {
       }));
     }
     console.log(orderData);
-  }
+  } */
 
+  function handleOnChange(event) {
+    const { name, value } = event.target;
+    setFinalForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
   function handleAddOrder(event) {
     event.preventDefault();
-    if (!orderData.itemDescription || orderData.quantity <= 0) {
-      setAddError("Please select an item and specify a valid quantity.");
+
+    const requiredFields = {
+      itemDescription: "Item description",
+      quantity: "Quantity",
+      transferNumber: "Transfer Number",
+      transferDate: "Transfer Date",
+      fromProject: "Source",
+      toProject: "Destination",
+      itemCondition: "Item condition",
+    };
+
+    let missingFields = [];
+
+    for (const [key, label] of Object.entries(requiredFields)) {
+      if (
+        ((!orderData[key] || (key === "quantity" && orderData[key] <= 0)) &&
+          !finalForm[key]) ||
+        (key === "transferNumber" && finalForm[key] <= 0)
+      ) {
+        missingFields.push(label);
+      }
+    }
+
+    if (missingFields.length === Object.entries(requiredFields).length) {
+      toast.error("Please fill the form below then try again");
+      return;
+    } else if (missingFields.length > 0) {
+      toast.error(`Missing: ${missingFields.join(", ")}`);
       return;
     }
-    setOrders((prev) => [...prev, orderData]);
+
+    if (finalForm.toProject === finalForm.fromProject) {
+      toast.error("Source and destination projects cannot be the same");
+      return;
+    }
+
+    // Add order to the list
+    setAddedOrders((prev) => [...prev, orderData]);
+    setOrders(
+      addedOrders.map((order) => ({
+        itemDescription: order.itemId,
+        quantity: order.quantity,
+        itemCondition: order.itemCondition,
+      }))
+    );
+    /* setFinalForm((prevForm) => ({
+      ...prevForm,
+      order: orders,
+    })); */
+
+    console.log("Order added:", orderData);
     console.log(orders);
+    console.log(addedOrders);
 
-    // Optionally reset form here
+    // Optionally reset form here after adding an order
+    // e.g., resetOrderData(); if you create a function to reset all fields
   }
+  /*   useEffect(() => {
+    setFinalForm((prevForm) => ({
+      ...prevForm,
+      order: orders,
+    }));
+  }, [orders]); */
 
+  /*  function handleConfirmOrders(event) {
+    event.preventDefault();
+
+    const requiredFields = {
+      transferNumber: "Transfer Number",
+      transferDate: "Transfer Date",
+      fromProject: "Source",
+      toProject: "Destination",
+    };
+
+    let missingFields = [];
+
+    for (const [key, label] of Object.entries(requiredFields)) {
+      if (
+        !finalForm[key] ||
+        (key === "transferNumber" && finalForm[key] <= 0)
+      ) {
+        missingFields.push(label);
+      }
+    }
+
+    if (missingFields.length === Object.entries(requiredFields).length) {
+      toast.error("Please fill the empty inputs");
+      return;
+    } else if (missingFields.length > 0) {
+      toast.error(`Missing: ${missingFields.join(", ")}`);
+      return;
+    }
+
+    if (finalForm.toProject === finalForm.fromProject) {
+      toast.error("Source and destination projects cannot be the same");
+      return;
+    }
+
+    
+    console.log(finalForm);
+  }
+ */
   function handleDeleteOrder(orderToDelete) {
     setOrders((prevOrders) =>
       prevOrders.filter((_, index) => index !== orderToDelete)
@@ -194,11 +345,8 @@ function Transfer() {
         itemId: "",
         itemCondition: "",
         quantity: "",
-        driverName: "",
-        transferDate: "",
-        fromProject: "",
-        toProject: "",
       });
+      setAddedOrders([]);
       setOrders([]);
     } catch (error) {
       console.log(error);
@@ -217,11 +365,31 @@ function Transfer() {
     }
   };
 
+  // Improving input type
+  const inputRef = useRef(null);
+  useEffect(() => {
+    const currentInput = inputRef.current;
+    const preventScroll = (event) => {
+      event.preventDefault();
+    };
+
+    if (currentInput) {
+      currentInput.addEventListener("wheel", preventScroll);
+    }
+
+    // Cleanup function to remove event listener
+    return () => {
+      if (currentInput) {
+        currentInput.removeEventListener("wheel", preventScroll);
+      }
+    };
+  }, []);
+
   return (
     <main>
       {/* Static content or headers */}
-      <section className="mb-8 sm:mb-8">
-        <div className="mt-16 flex flex-col ml-28 sm:mt-16 sm:ml-[34.4%] md:ml-[22%] lg:ml-[45%]">
+      <section className="mb-8 sm:mb-8 xl:mb-0">
+        <div className="mt-16 flex flex-col ml-28 sm:mt-16 xl:mt-8 sm:ml-[34.4%] md:ml-[22%] lg:ml-[40%]">
           <h1 className="text-black font-semibold sm:text-[35px]">
             Transfer Your Order Now
           </h1>
@@ -229,18 +397,124 @@ function Transfer() {
         </div>
       </section>
 
-      {addError && <p className="text-red-500 text-center">{addError}</p>}
-
       <section>
         <form className="flex flex-col justify-center items-start md:flex-row">
-          <div className="bg-white shadow-lg rounded-[10px] p-4 m-4 md:ml-24">
-            <h1 className="text-center font-bold text-gray-950">
+          <div className="bg-white shadow-md rounded-[10px] p-4 m-4 md:ml-48 w-[850px]">
+            <h1 className="text-center font-bold text-gray-950 text-2xl">
               Formwork & Scaffolding Transfer
             </h1>
+            <div className="flex items-center gap-[7rem] mt-12">
+              <div className="flex items-center gap-2">
+                <label
+                  htmlFor="transferNumber"
+                  className="text-gray-950 font-medium"
+                >
+                  Transfer Number
+                </label>
+                <input
+                  type="number"
+                  id="transferNumber"
+                  name="transferNumber"
+                  value={finalForm.transferNumber}
+                  onChange={handleOnChange}
+                  style={{
+                    WebkitAppearance: "none",
+                    MozAppearance: "textfield",
+                  }}
+                  className="appearance-none w-[150px] sm:w-[213px] rounded-[5px] h-6 pl-2 border border-gray-400 focus:border-blue-500 sm:h-8"
+                  ref={inputRef}
+                />
+              </div>
+              <div className="flex items-center gap-[15px]">
+                <label
+                  htmlFor="transferDate"
+                  className="text-gray-950 font-medium"
+                >
+                  Transfer Date
+                </label>
+                <input
+                  id="transferDate"
+                  name="transferDate"
+                  type="date"
+                  value={finalForm.transferDate}
+                  onChange={handleOnChange}
+                  required
+                  className="w-[150px] sm:w-[213px] rounded-[5px] h-6 pl-2 pr-2 border border-gray-400 focus:border-blue-500 sm:h-8"
+                />
+              </div>
+            </div>
+            <div className="flex items-center gap-[5.8rem] mb-8 mt-4">
+              <div className="flex items-center gap-6">
+                <label
+                  htmlFor="fromProject"
+                  className="text-gray-950 font-medium"
+                >
+                  From / Source
+                </label>
+                {projects.length > 0 && (
+                  <Select
+                    id="fromProject"
+                    name="fromProject"
+                    required
+                    options={projectOptions}
+                    onChange={(selectedSource) => {
+                      setFinalForm((prev) => ({
+                        ...prev,
+                        //fromProject: selectedSource ? selectedSource.label : "",
+                        fromProject: selectedSource ? selectedSource.value : "",
+                      }));
+                    }}
+                    value={projectOptions.find(
+                      (selectedSource) =>
+                        selectedSource.value === finalForm.fromProject
+                    )}
+                    className="w-[150px] sm:w-[220px] h-6 rounded-[5px] pl-2 sm:h-8"
+                    isClearable
+                    placeholder="source..."
+                  />
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <label
+                  htmlFor="toProject"
+                  className="text-gray-950 font-medium"
+                >
+                  To / Destination
+                </label>
+                {projects.length > 0 && (
+                  <Select
+                    id="toProject"
+                    name="toProject"
+                    required
+                    options={projectOptions}
+                    onChange={(selectedDestination) => {
+                      setFinalForm((prev) => ({
+                        ...prev,
+                        /* toProject: selectedDestination
+                          ? selectedDestination.label
+                          : "", */
+                        toProject: selectedDestination
+                          ? selectedDestination.value
+                          : "",
+                      }));
+                    }}
+                    value={projectOptions.find(
+                      (selectedDestination) =>
+                        selectedDestination.value === finalForm.toProject
+                    )}
+                    className="w-[150px] sm:w-[220px] h-6 rounded-[5px] pl-2 sm:h-8"
+                    isClearable
+                  />
+                )}
+              </div>
+            </div>
+
+            <hr className="border border-gray-700" />
+
             <h2 className="text-gray-950 font-bold mb-2 mt-4">Item Details:</h2>
             <div className="flex flex-col justify-start items-start mb-4">
               <label htmlFor="itemDescription" className="text-gray-950 mb-2">
-                Item Description:
+                Item Description & Code:
               </label>
               {isLoading ? (
                 <p className="text-lg text-blue-500">Loading...</p>
@@ -262,12 +536,16 @@ function Transfer() {
                   isLoading={isLoading}
                   isDisabled={isLoading}
                   className="w-full"
+                  isClearable
                 />
               )}
             </div>
-            <div className="flex justify-between items-center gap-20">
-              <div className="flex flex-col justify-start items-start">
-                <label htmlFor="itemCondition" className="text-gray-950 mb-2">
+            <div className="flex items-center gap-[9.5rem]">
+              <div className="flex items-end gap-4">
+                <label
+                  htmlFor="itemCondition"
+                  className="font-medium text-gray-950"
+                >
                   Item Condition
                 </label>
                 {itemConditions.length > 0 && (
@@ -284,9 +562,9 @@ function Transfer() {
                     value={itemCondition.find(
                       (option) => option.value === orderData.itemCondition
                     )}
-                    className="react-select"
+                    className="react-select w-[150px] sm:w-[220px] h-6 rounded-[5px] pl-2 sm:h-8"
                     classNamePrefix="react-select"
-                    styles={{
+                    /* styles={{
                       control: (provided) => ({
                         ...provided,
                         width: "150px", // Default width
@@ -309,12 +587,13 @@ function Transfer() {
                           zIndex: 5,
                         },
                       }),
-                    }}
+                    }} */
+                    isClearable
                   />
                 )}
               </div>
-              <div className="flex flex-col justify-start items-start">
-                <label htmlFor="quantity" className="text-gray-950 mb-2">
+              <div className="flex items-center gap-4 mt-2">
+                <label htmlFor="quantity" className="text-gray-950">
                   Quantity
                 </label>
                 <input
@@ -322,13 +601,29 @@ function Transfer() {
                   name="quantity"
                   type="number"
                   value={orderData.quantity}
-                  onChange={handleChange}
+                  onChange={(event) => {
+                    setOrderData((prev) => ({
+                      ...prev,
+                      quantity: event.target.value,
+                    }));
+                  }}
                   required
-                  className="w-[150px] sm:w-[200px] rounded-[10px] h-12 pl-2 outline-none border-2 border-gray-300 focus:border-blue-500 sm:h-8"
+                  ref={inputRef}
+                  className="w-[150px] sm:w-[213px] h-6 rounded-[5px] pl-2 outline-none border-2 border-gray-300 focus:border-blue-500 sm:h-9"
                 />
               </div>
             </div>
-            <h2 className="text-gray-950 font-bold mb-2 mt-4">
+
+            <div className="text-center mt-4">
+              <button
+                onClick={handleAddOrder}
+                className="bg-[#1e293b] w-full rounded-[5px] text-white py-1 px-8 hover:bg-[#0f172a] hover:font-semibold"
+              >
+                Add Item
+              </button>
+            </div>
+
+            {/* <h2 className="text-gray-950 font-bold mb-2 mt-4">
               Transfer Details:
             </h2>
             <div className="flex justify-between items-center">
@@ -346,71 +641,11 @@ function Transfer() {
                   className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none border-2 border-gray-300 focus:border-blue-500 sm:h-8"
                 />
               </div>
-              <div className="flex flex-col justify-start items-start">
-                <label htmlFor="transferDate" className="text-gray-950 mb-2">
-                  Transfer Date
-                </label>
-                <input
-                  id="transferDate"
-                  name="transferDate"
-                  type="date"
-                  value={orderData.transferDate}
-                  onChange={handleChange}
-                  required
-                  className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none border-2 border-gray-300 focus:border-blue-500 sm:h-8"
-                />
-              </div>
             </div>
-            <h2 className="text-gray-950 font-bold mb-2 mt-4">Projects:</h2>
-            <div className="flex justify-between items-center mb-4">
-              <div className="flex flex-col justify-start items-start">
-                <label htmlFor="fromProject" className="text-gray-950 mb-2">
-                  From
-                </label>
-                {projects.length > 0 && (
-                  <select
-                    id="fromProject"
-                    name="fromProject"
-                    value={orderData.fromProject}
-                    onChange={handleChange}
-                    required
-                    className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none border-2 border-gray-300 focus:border-blue-500 sm:h-8"
-                  >
-                    <option value="">Source...</option>
-                    {projects.map((project, index) => (
-                      <option key={index} value={project.name}>
-                        {project.name}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </div>
-              <div className="flex flex-col justify-start items-start">
-                <label htmlFor="toProject" className="text-gray-950 mb-2">
-                  To
-                </label>
-                {projects.length > 0 && (
-                  <select
-                    id="toProject"
-                    name="toProject"
-                    value={orderData.toProject}
-                    onChange={handleChange}
-                    required
-                    className="w-[150px] sm:w-[200px] h-6 rounded-[10px] pl-2 outline-none border-2 border-gray-300 focus:border-blue-500 sm:h-8"
-                  >
-                    <option value="">Destination...</option>
-                    {projects.map((project, index) => (
-                      <option key={index} value={project.name}>
-                        {project.name}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </div>
-            </div>
+            <h2 className="text-gray-950 font-bold mb-2 mt-4">Projects:</h2> */}
           </div>
 
-          <div className="bg-white shadow-2xl rounded-[10px] p-4 m-4">
+          {/* <div className="bg-white shadow-2xl rounded-[10px] p-4 m-4">
             <h1 className="text-center text-gray-950 font-bold">
               Confirm Your Order
             </h1>
@@ -456,13 +691,86 @@ function Transfer() {
                 Add Item
               </button>
             </div>
-          </div>
+          </div> */}
 
           {/* Other fields like driverName, transferDate, fromProject, and toProject can be added similarly */}
         </form>
       </section>
 
-      {orders.length > 0 && (
+      {addedOrders.length > 0 && (
+        <div className="flex flex-col p-6 bg-white shadow-md rounded-[5px] w-[700px] mx-auto  mb-12">
+          <div className="flex flex-col p-6 bg-white shadow-md rounded-lg mx-auto mb-12 w-full max-w-4xl overflow-x-auto">
+            <ToastContainer />
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-700">
+                <tr>
+                  <th className="px-4 py-2 text-left text-xs font-semibold text-white uppercase tracking-wider sm:text-sm">
+                    Item Description - Code
+                  </th>
+                  <th className="px-4 py-2 text-left text-xs font-semibold text-white uppercase tracking-wider sm:text-sm">
+                    Quantity
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {addedOrders.map((order, index) => (
+                  <tr key={index}>
+                    <td className="px-4 py-3 text-sm text-gray-900 sm:text-base">
+                      {order.itemDescription}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-500 sm:text-base">
+                      {order.quantity}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="flex justify-between items-center mt-6">
+              <div className="p-4">
+                <input
+                  type="file"
+                  className="w-full p-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                />
+              </div>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <button className="bg-blue-600 rounded-[10px] text-white py-1 px-8 hover:bg-blue-800 transition-all duration-300">
+                    Confirm Orders
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-gray-850 tracking-wider">
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription className="text-gray-950 tracking-wide">
+                      This action will permanently Transfer your orders and your
+                      are no longer available to edit or delete your order from
+                      here
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter className="flex items-center gap-3">
+                    <AlertDialogCancel className="bg-gray-700 px-3 py-2 rounded-lg text-white hover:bg-gray-800 transition-all duration-300">
+                      Cancel
+                    </AlertDialogCancel>
+                    <form onSubmit={handleConfirmOrder} method="post">
+                      <button
+                        type="submit"
+                        disabled={isConfirming}
+                        className="bg-blue-700 rounded-[10px] text-white px-3 py-2 hover:bg-blue-800  transition-all duration-300"
+                      >
+                        {isConfirming ? "Transferring..." : "Confirm"}
+                      </button>
+                    </form>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* {orders.length > 0 && (
         <section className="mt-8 mb-2">
           <form
             onSubmit={handleConfirmOrder}
@@ -511,7 +819,7 @@ function Transfer() {
             </div>
           </form>
         </section>
-      )}
+      )} */}
       <ToastContainer />
     </main>
   );

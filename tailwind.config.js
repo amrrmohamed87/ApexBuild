@@ -23,6 +23,9 @@ module.exports = {
       fontFamily: {
         yourFont: ['YourFont'],
     },
+    appearance: {
+      none: 'none', // Enables using 'appearance-none'
+    },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

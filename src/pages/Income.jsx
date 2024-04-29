@@ -241,7 +241,7 @@ function Income() {
   );
 
   return (
-    <>
+    <main className="flex flex-col">
       <section className="mb-8 sm:mb-8">
         <div className="mt-16 flex flex-col ml-28 sm:mt-16 sm:ml-[34.4%] md:ml-[22%] lg:ml-[45%]">
           <h1 className="text-black font-semibold sm:text-[35px]">
@@ -254,7 +254,7 @@ function Income() {
       {isLoading ? (
         <p>Loading....</p>
       ) : (
-        <div className="flex flex-col p-6 bg-white shadow-md w-[1200px] mx-auto md:ml-[17rem] mb-12">
+        <div className="flex flex-col p-4 bg-white shadow-md xl:w-[1000px] mx-auto md:ml-[17rem] mb-12">
           <div className="flex justify-between items-center">
             <button
               className="flex items-center gap-2 bg-white shadow-md px-8 py-2 rounded-md mb-2"
@@ -566,7 +566,7 @@ function Income() {
           <Pagination />
         </div>
       )}
-    </>
+    </main>
   );
 }
 

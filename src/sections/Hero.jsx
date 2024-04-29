@@ -28,7 +28,7 @@ function Hero({ src, title, subTitle, description, id }) {
         }}
       ></div> */}
         <div className="absolute inset-0 bg-black bg-opacity-30"></div>
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-white md:ml-[24rem] md:w-1/2 mt-[4rem]">
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-white">
           <h1
             className="text-[35px] md:text-[31px] tracking-widest uppercase font-yourFont
           "
@@ -46,7 +46,7 @@ function Hero({ src, title, subTitle, description, id }) {
                   background:
                     "linear-gradient(to right, rgba(255, 6, 179, 0.6), rgba(227, 5, 159, 0.6), rgba(116, 2, 209, 0.6), rgba(2, 74, 189, 0.6))",
                 }}
-                className="px-6 py-3 text-[20px] tracking-widest rounded-lg"
+                className="px-6 py-3 text-[20px] tracking-widest rounded-lg hover:-translate-y-1 transition-all duration-300"
               >
                 GET STARTED
               </button>

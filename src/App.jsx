@@ -18,6 +18,7 @@ import NewUser from "./pages/NewUser.jsx";
 import Balance from "./pages/Balance.jsx";
 import ItemsEditor from "./pages/ItemsEditor.jsx";
 import Request from "./pages/Request.jsx";
+import RequestedOrders from "./pages/RequestedOrders.jsx";
 
 //import { action as confirmAction } from "./pages/NewTransfer.jsx";
 function PrivateRoutes({ children }) {
@@ -94,6 +95,14 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoutes>
             <Request />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "requested-orders",
+        element: (
+          <PrivateRoutes>
+            <RequestedOrders />
           </PrivateRoutes>
         ),
       },

@@ -17,9 +17,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-import logo from "../assets/icon.png";
+import logo from "../assets/ourService.png";
+import { IoIosArrowDropleft } from "react-icons/io";
 
 function LeftSiderbar() {
+  const [open, setIsOpen] = useState(true);
   const [isSidebar, setIsSidebar] = useState(false);
   const submit = useSubmit();
 
@@ -52,71 +54,93 @@ function LeftSiderbar() {
       <nav
         className={`${
           isSidebar ? "flex" : "hidden"
-        } fixed top-0 md:flex px-2 py-4 flex-col justify-between h-screen min-w-[210px] max-w-[250px] bg-[#18202e]
+        } fixed top-0 md:flex px-6 py-5 flex-col justify-between h-screen ${
+          open ? "w-72" : "w-20"
+        } bg-[#18202e]
          transition-all duration-300 z-50`}
       >
+        <IoIosArrowDropleft
+          size={30}
+          className={`absolute cursor-pointer -right-3 top-9 text-white text-opacity-35 hover:text-opacity-100 transition-all bg-[#18202e] rounded-full ${
+            !open && "rotate-180 transition-all duration-300"
+          }`}
+          onClick={() => {
+            setIsOpen(!open);
+          }}
+        />
         <div className="flex flex-col gap-3">
-          <Link to="/dashboard" className="flex gap-1 items-center">
-            <p className="text-white text-[10px] font-yourFont">
+          <Link to="/dashboard">
+            {/* <p className="text-white text-[10px] font-yourFont">
               ConstructMeta
-            </p>
-            <img src={logo} alt="logo" width={30} height={20} />
+            </p> */}
+            <img src={logo} alt="logo" width={250} />
           </Link>
 
           <Link className="flex items-center gap-3">
             <img
               src={avatar}
               alt="profile-pic"
-              className="h-10 w-10 rounded-full"
+              className={`${
+                open ? "h-10" : "h-8"
+              } w-10 rounded-full duration-300`}
             />
 
             <div className="flex flex-col">
-              <p className="text-white">{name}</p>
-              <p className="text-white text-opacity-30 max-w-[150px] text-ellipsis overflow-hidden whitespace-nowrap">
+              <p className={`text-white origin-left ${!open && "scale-0"}`}>
+                {name}
+              </p>
+              <p
+                className={`text-white text-opacity-30 max-w-[150px] text-ellipsis overflow-hidden whitespace-nowrap origin-left ${
+                  !open && "scale-0"
+                }`}
+              >
                 {company}
               </p>
             </div>
           </Link>
 
-          <ul className="flex flex-col gap-6 m-1">
+          <ul className="flex flex-col gap-3 m-1">
             {sidebarLinks.map((link) => (
               <li key={link.label} className="text-white text-opacity-35">
                 <NavLink
                   to={link.to}
                   className={({ isActive }) =>
                     isActive
-                      ? "bg-[#414142] flex items-center gap-2 p-2 rounded text-white"
-                      : "bg-transparent flex items-center gap-2 p-2 rounded transition-all duration-300 hover:text-white"
+                      ? "bg-[#414142] flex items-center gap-2 p-1 rounded text-white"
+                      : "bg-transparent flex items-center gap-2 p-1 rounded transition-all duration-300 hover:text-white"
                   }
                 >
-                  {link.icon} {link.label}
+                  {link.icon} {open ? link.label : ""}
                 </NavLink>
               </li>
             ))}
           </ul>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <button className="text-white text-opacity-35 hover:bg-[#40E0D0] hover:text-black transition-all duration-300 flex items-center justify-start gap-1 px-2 py-2 rounded">
-                <BiLogOut /> <p>Logout</p>
+              <button className="bg-transparent flex items-center gap-2 p-1 rounded transition-all duration-300 text-white text-opacity-35 hover:text-white">
+                <BiLogOut size={20} />{" "}
+                <p className={`origin-left ${!open && "scale-0"}`}>Logout</p>
               </button>
             </AlertDialogTrigger>
-            <AlertDialogContent className="bg-black">
+            <AlertDialogContent className="bg-black border border-blue-900">
               <AlertDialogHeader>
-                <AlertDialogTitle className="text-[#40E0D0]">
+                <AlertDialogTitle className="text-gray-300 tracking-wider">
                   Are you absolutely sure?
                 </AlertDialogTitle>
-                <AlertDialogDescription className="text-white">
+                <AlertDialogDescription className="text-white tracking-wide">
                   This action will permanently Log you out from your account and
                   you are no longer available to use this services until you
                   login again.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter className="flex items-center gap-3">
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel className="bg-gray-700 px-3 py-2 rounded-lg text-white hover:bg-gray-800 transition-all duration-300">
+                  Cancel
+                </AlertDialogCancel>
                 <Form action="/logout" method="post">
                   <button
                     onClick={logoutHandler}
-                    className="bg-white px-3 py-2 rounded-lg text-md text-black"
+                    className="bg-white px-3 py-2 rounded-lg text-md text-black hover:bg-red-500 hover:text-white transition-all duration-300"
                   >
                     Logout
                   </button>

@@ -59,7 +59,7 @@ function Login() {
       localStorage.setItem("avatar", avatar);
 
       if (!response.ok) {
-        const errorMessage = resData.message || "Invalid Data";
+        const errorMessage = resData.message;
         setError(errorMessage);
         setIsLogin(false);
         return;
@@ -68,7 +68,7 @@ function Login() {
       setIsLogin(false);
       return navigate("/dashboard");
     } catch (error) {
-      setError("Unexpected error");
+      setError("Invalid email or password");
       setIsLogin(false);
     }
   };

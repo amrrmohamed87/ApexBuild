@@ -19,6 +19,7 @@ import { CiSquareQuestion } from "react-icons/ci";
 import { FaUserPlus } from "react-icons/fa";
 import { FaBalanceScaleRight } from "react-icons/fa";
 import { FaEdit } from "react-icons/fa";
+import { PiGitPullRequestFill } from "react-icons/pi";
 
 export const navLinks = [
   { label: "Home", to: "home" },
@@ -43,6 +44,11 @@ export const sidebarLinks = [
     label: "Request",
     to: "/request",
     icon: <CiSquareQuestion size={20} />,
+  },
+  {
+    label: "Requested orders",
+    to: "/requested-orders",
+    icon: <PiGitPullRequestFill size={20} />,
   },
   { label: "User", to: "/user", icon: <FaUserPlus size={20} /> },
 ];
