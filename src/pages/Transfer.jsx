@@ -42,20 +42,21 @@ function Transfer() {
     quantity: "",
   });
   const [addedOrders, setAddedOrders] = useState([]);
-  const [orders, setOrders] = useState([]);
+  const [ordersData, setOrders] = useState([]);
   const [finalForm, setFinalForm] = useState({
     transferNumber: "",
     transferDate: "",
     fromProject: "",
     toProject: "",
-    order: [],
+    orders: [],
+    image: "",
   });
   useEffect(() => {
     setFinalForm((prevForm) => ({
       ...prevForm,
-      order: orders,
+      orders: ordersData,
     }));
-  }, [orders]);
+  }, [ordersData]);
   console.log(finalForm);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -186,6 +187,15 @@ function Transfer() {
       [name]: value,
     }));
   }
+
+  function handleImageOnChange(event) {
+    const file = event.target.files[0];
+    setFinalForm((prev) => ({
+      ...prev,
+      image: file,
+    }));
+  }
+
   function handleAddOrder(event) {
     event.preventDefault();
 
@@ -229,7 +239,7 @@ function Transfer() {
     setOrders(
       addedOrders.map((order) => ({
         itemDescription: order.itemId,
-        quantity: order.quantity,
+        quantity: parseInt(order.quantity, 10),
         itemCondition: order.itemCondition,
       }))
     );
@@ -239,7 +249,7 @@ function Transfer() {
     })); */
 
     console.log("Order added:", orderData);
-    console.log(orders);
+    console.log(ordersData);
     console.log(addedOrders);
 
     // Optionally reset form here after adding an order
@@ -300,7 +310,7 @@ function Transfer() {
     );
   }
 
-  const handleConfirmOrder = async (event) => {
+  /* const handleConfirmOrder = async (event) => {
     event.preventDefault();
     setIsConfirming(true);
 
@@ -329,9 +339,9 @@ function Transfer() {
       /*  if (!response.ok) {
         throw new Error("Failed to send data");
       } */
-      /* if (!response.ok) {
+  /* if (!response.ok) {
         return response.message;
-      } */
+      } 
 
       const responseBody = await response.json();
 
@@ -368,6 +378,64 @@ function Transfer() {
         fromProject: "",
         toProject: "",
       });
+    }
+  }; */
+
+  const handleTransferOrder = async (event) => {
+    event.preventDefault();
+    setIsConfirming(true);
+
+    const formData = new FormData();
+    formData.append("transferNumber", parseInt(finalForm.transferNumber, 10));
+    formData.append("transferDate", finalForm.transferDate);
+    formData.append("fromProject", finalForm.fromProject);
+    formData.append("toProject", finalForm.toProject);
+    formData.append("orders", JSON.stringify(finalForm.orders));
+
+    if (finalForm.image) {
+      formData.append("image", finalForm.image);
+    }
+
+    console.log(formData);
+
+    try {
+      const response = await fetch(
+        "https://apex-build.onrender.com/api/v1/transfer-order",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const resData = await response.json();
+
+      if (!response.ok) {
+        toast.error(resData.message || "Failed to transfer your ORDER");
+        setIsConfirming(false);
+        return;
+      }
+
+      toast.success("Transfer Successful");
+      setOrderData({
+        itemDescription: "",
+        itemId: "",
+        itemCondition: "",
+        quantity: "",
+      });
+      setAddedOrders([]);
+      setOrders([]);
+      setFinalForm({
+        transferNumber: "",
+        transferDate: "",
+        fromProject: "",
+        toProject: "",
+        orders: [],
+        image: "",
+      });
+      setIsConfirming(false);
+    } catch (error) {
+      toast.error(error.message);
+      setIsConfirming(false);
+      return;
     }
   };
 
@@ -734,7 +802,7 @@ function Transfer() {
                       <MdDeleteSweep
                         onClick={() => handleDeleteOrder(index)}
                         size={15}
-                        className="text-red-500 hover:text-red-700 transition-all duration-300 cursor-pointer"
+                        className="text-red-500 hover:text-red-700  transition-all duration-300 cursor-pointer"
                       />
                     </td>
                   </tr>
@@ -745,6 +813,8 @@ function Transfer() {
               <div className="p-4">
                 <input
                   type="file"
+                  name="image"
+                  onChange={handleImageOnChange}
                   className="w-full p-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                 />
               </div>
@@ -769,7 +839,7 @@ function Transfer() {
                     <AlertDialogCancel className="bg-gray-700 px-3 py-2 rounded-lg text-white hover:bg-gray-800 transition-all duration-300">
                       Cancel
                     </AlertDialogCancel>
-                    <form onSubmit={handleConfirmOrder} method="post">
+                    <form onSubmit={handleTransferOrder} method="post">
                       <button
                         type="submit"
                         disabled={isConfirming}
