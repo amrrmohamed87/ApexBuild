@@ -16,6 +16,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
+import { MdDeleteSweep } from "react-icons/md";
+
 function Transfer() {
   const [items, setItems] = useState([]);
   const itemOptions = items.map((item) => ({
@@ -289,6 +291,10 @@ function Transfer() {
   }
  */
   function handleDeleteOrder(orderToDelete) {
+    setAddedOrders((prevOrders) =>
+      prevOrders.filter((_, index) => index !== orderToDelete)
+    );
+
     setOrders((prevOrders) =>
       prevOrders.filter((_, index) => index !== orderToDelete)
     );
@@ -710,6 +716,9 @@ function Transfer() {
                   <th className="px-4 py-2 text-left text-xs font-semibold text-white uppercase tracking-wider sm:text-sm">
                     Quantity
                   </th>
+                  <th className="px-4 py-2 text-left text-xs font-semibold text-white uppercase tracking-wider sm:text-sm">
+                    Remove
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -720,6 +729,13 @@ function Transfer() {
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-500 sm:text-base">
                       {order.quantity}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-500 sm:text-base">
+                      <MdDeleteSweep
+                        onClick={() => handleDeleteOrder(index)}
+                        size={15}
+                        className="text-red-500 hover:text-red-700 transition-all duration-300 cursor-pointer"
+                      />
                     </td>
                   </tr>
                 ))}
