@@ -48,13 +48,13 @@ function Transfer() {
     toProject: "",
     order: [],
   });
-  /* useEffect(() => {
+  useEffect(() => {
     setFinalForm((prevForm) => ({
       ...prevForm,
       order: orders,
     }));
-  }, [orders]); */
-  //console.log(finalForm);
+  }, [orders]);
+  console.log(finalForm);
 
   const [isLoading, setIsLoading] = useState(false);
   const [addError, setAddError] = useState("");
