@@ -3,10 +3,10 @@ import LeftSiderbar from "./components/LeftSidebar";
 function RootLayout() {
   return (
     <>
-      <div className="flex flex-col">
+      <main className="w-full h-screen flex flex-row relative">
         <LeftSiderbar />
         <Outlet />
-      </div>
+      </main>
     </>
   );
 }

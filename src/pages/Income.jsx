@@ -383,12 +383,7 @@ function Income() {
                   >
                     Item
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
-                  >
-                    Source
-                  </th>
+
                   <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
@@ -422,9 +417,7 @@ function Income() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {order.itemDescription.itemDescription}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {order.fromProject.name}
-                    </td>
+
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {formateDate(order.transferDate)}
                     </td>
@@ -479,18 +472,6 @@ function Income() {
                                 Driver:{" "}
                                 <span className="text-black font-normal">
                                   {order.driverName}
-                                </span>
-                              </h1>
-                              <h1 className="text-gray-950 font-semibold">
-                                Source:{" "}
-                                <span className="text-black font-normal">
-                                  {order.fromProject.name}
-                                </span>
-                              </h1>
-                              <h1 className="text-gray-950 font-semibold">
-                                Destination:{" "}
-                                <span className="text-black font-normal">
-                                  {order.toProject.name}
                                 </span>
                               </h1>
                             </div>

@@ -478,12 +478,7 @@ function History() {
                                   {formatDate(order.transferDate)}
                                 </span>
                               </h1>
-                              <h1 className="text-gray-950 font-semibold">
-                                Driver:{" "}
-                                <span className="text-black font-normal">
-                                  {order.driverName}
-                                </span>
-                              </h1>
+
                               <h1 className="text-gray-950 font-semibold">
                                 Source:{" "}
                                 <span className="text-black font-normal">

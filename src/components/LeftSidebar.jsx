@@ -21,7 +21,7 @@ import logo from "../assets/ourService.png";
 import { IoIosArrowDropleft } from "react-icons/io";
 
 function LeftSiderbar() {
-  const [open, setIsOpen] = useState(true);
+  const [open, setIsOpen] = useState(false);
   const [isSidebar, setIsSidebar] = useState(false);
   const submit = useSubmit();
 

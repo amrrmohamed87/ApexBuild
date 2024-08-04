@@ -80,9 +80,9 @@ function Dashboard() {
         </h1>
       </section>
 
-      <section className="flex justify-center md:justify-start md:ml-[21rem] md:mb-8">
-        <Tabs defaultValue="addUser" className="w-[400px] md:w-[700px]">
-          <TabsList className="grid w-full grid-cols-4 p-2">
+      <section className="flex justify-center md:justify-start md:ml-40 md:mb-8">
+        <Tabs defaultValue="addUser" className="w-[400px] md:w-[1300px]">
+          <TabsList className="grid w-1/2 grid-cols-4 p-2">
             <TabsTrigger value="addUser">Add users</TabsTrigger>
             <TabsTrigger value="password">Material</TabsTrigger>
             <TabsTrigger value="password">Transfer</TabsTrigger>
